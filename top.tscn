@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1onhculuqywq"]
+
+[ext_resource type="Script" uid="uid://cy8wsdow5s4e4" path="res://top.gd" id="1_rl3jk"]
+[ext_resource type="PackedScene" uid="uid://b3rld2cit3id" path="res://motor.tscn" id="2_on2c2"]
+
+[node name="Control" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+script = ExtResource("1_rl3jk")
+
+[node name="Serial" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Serial"]
+layout_mode = 2
+
+[node name="Refresh" type="Button" parent="Serial/HBoxContainer"]
+layout_mode = 2
+text = "Refresh ports"
+
+[node name="Port" type="OptionButton" parent="Serial/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BaudRate" type="OptionButton" parent="Serial/HBoxContainer"]
+layout_mode = 2
+
+[node name="Connected" type="CheckButton" parent="Serial/HBoxContainer"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Serial output" type="RichTextLabel" parent="Serial"]
+layout_mode = 2
+size_flags_vertical = 3
+scroll_following = true
+
+[node name="Motor" parent="." instance=ExtResource("2_on2c2")]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[connection signal="pressed" from="Serial/HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
+[connection signal="toggled" from="Serial/HBoxContainer/Connected" to="." method="_on_connected_toggled"]

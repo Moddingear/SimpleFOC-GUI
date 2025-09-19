@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxe6335krl6ab"]
+
+[ext_resource type="Script" uid="uid://c6gugwl81jow6" path="res://boolean_field.gd" id="1_sphgx"]
+
+[node name="BooleanField" type="CheckButton"]
+script = ExtResource("1_sphgx")
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]
