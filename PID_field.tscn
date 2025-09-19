@@ -35,3 +35,8 @@ commander_letter = "R"
 layout_mode = 2
 label = "Limit"
 commander_letter = "L"
+
+[node name="Low-pass" parent="." instance=ExtResource("1_0tluy")]
+layout_mode = 2
+label = "Low pass"
+commander_letter = "F"
