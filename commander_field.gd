@@ -41,17 +41,16 @@ func _exit_tree() -> void:
 		WantsRefresh.disconnect(commparent.OnChildWantsRefresh)
 		SendValue.disconnect(commparent.OnChildSendValue)
 
-func process_line(data: String) -> void:
+func process_line(data: String) -> bool:
 	var best_match := ""
 	var motor_match : motor = null
 	for key in field_map:
 		if data.begins_with(key) && key.length() > best_match.length():
 			best_match = key
 	if best_match == "":
-		
-		printerr("Missing key for %s at %s" % [data, get_path()])
-		return
-	field_map[best_match].process_line(data.right(-best_match.length()))
+		#printerr("Missing key for %s at %s" % [data, get_path()])
+		return false
+	return field_map[best_match].process_line(data.right(-best_match.length()))
 
 func OnChildWantsRefresh(fields:Array[String]) -> void:
 	var this_fields : Array[String]

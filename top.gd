@@ -7,6 +7,9 @@ var serial_port = GdSerial.new()
 @onready var serial_refresh_button := $Serial/HBoxContainer/Refresh
 @onready var serial_monitor := $"Serial/Serial output"
 
+var motor_scene = preload("res://motor.tscn")
+var motor_monitor_keys :Dictionary[String, motor] = {}
+
 func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 	var ports := serial_port.list_ports()
 	serial_port_entry.clear()
@@ -31,6 +34,20 @@ func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 func _ready() -> void:
 	refresh_ports("", 115200)
 
+func process_monitor(command:String)-> bool:
+	var selected_key :String = ""
+	for key :String in motor_monitor_keys.keys():
+		if selected_key.length() < key.length():
+			if command.begins_with(key):
+				selected_key = key
+	if selected_key in motor_monitor_keys:
+		var this_motor = motor_monitor_keys[selected_key]
+		if !command.ends_with(this_motor.monitor_end_character):
+			return false
+		this_motor.process_monitor(command.substr(this_motor.monitor_start_character.length(), command.length() - this_motor.monitor_end_character.length() - this_motor.monitor_start_character.length()))
+		return true
+	return false
+
 func _process(delta: float) -> void:
 	var serial_connected : bool = serial_port.is_open()
 	serial_connected_entry.set_pressed_no_signal(serial_connected)
@@ -49,8 +66,9 @@ func _process(delta: float) -> void:
 			var last_newline = concat.rfind("\n", scan_start)
 			for i in range(scan_start, concat.length()):
 				if concat[i] == "\n":
-					var line := concat.substr(last_newline, i - last_newline)
-					process_line(line.rstrip("\r\n").lstrip("\r\n"))
+					var line := concat.substr(last_newline, i - last_newline).rstrip("\r\n").lstrip("\r\n")
+					if !process_line(line):
+						process_monitor(line)
 					last_newline = i
 			serial_monitor.text = concat.right(1<<15) #only keep the last text received to avoid slowing down too much
 	else:
@@ -70,6 +88,7 @@ func _on_connected_toggled(toggled_on: bool) -> void:
 		serial_port.clear_buffer()
 		if !serial_port.open():
 			serial_port.close()
+		serial_port.writeline("@3")
 	else:
 		serial_port.close()
 
@@ -88,3 +107,14 @@ func OnChildSendValue(command : String) -> void:
 
 func _on_refresh_pressed() -> void:
 	refresh_ports("" if serial_port_entry.selected == -1 else serial_port_entry.get_item_text(serial_port_entry.selected), 0)
+
+
+func _on_create_pressed() -> void:
+	var nmotor := motor_scene.instantiate()
+	nmotor.monitor_start_character = $"New Motor/MonitorBegin/LineEdit".text.c_unescape()
+	nmotor.monitor_end_character = $"New Motor/MonitorEnd/LineEdit".text.c_unescape()
+	nmotor.monitor_split_character = $"New Motor/MonitorSeparator/LineEdit".text.c_unescape()
+	nmotor.commander_letter = $"New Motor/Character/LineEdit".text.c_unescape()
+	nmotor.name = "Motor " + nmotor.commander_letter
+	motor_monitor_keys[nmotor.monitor_start_character] = nmotor
+	add_child(nmotor)

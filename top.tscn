@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c1onhculuqywq"]
+[gd_scene load_steps=2 format=3 uid="uid://c1onhculuqywq"]
 
 [ext_resource type="Script" uid="uid://cy8wsdow5s4e4" path="res://top.gd" id="1_rl3jk"]
-[ext_resource type="PackedScene" uid="uid://b3rld2cit3id" path="res://motor.tscn" id="2_on2c2"]
 
 [node name="Control" type="TabContainer"]
 anchors_preset = 15
@@ -40,9 +39,108 @@ layout_mode = 2
 size_flags_vertical = 3
 scroll_following = true
 
-[node name="Motor" parent="." instance=ExtResource("2_on2c2")]
+[node name="New Motor" type="VBoxContainer" parent="."]
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="Character" type="HBoxContainer" parent="New Motor"]
+layout_mode = 2
+tooltip_text = "The character to which the commander answers for this motor"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Character"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Character"
+fit_content = true
+autowrap_mode = 0
+
+[node name="LineEdit" type="LineEdit" parent="New Motor/Character"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "M"
+
+[node name="MonitorBegin" type="HBoxContainer" parent="New Motor"]
+layout_mode = 2
+tooltip_text = "The begin character for the monitoring of the values of this motor
+motor.monitor_start_char"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorBegin"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Monitor start character"
+fit_content = true
+autowrap_mode = 0
+
+[node name="LineEdit" type="LineEdit" parent="New Motor/MonitorBegin"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MonitorEnd" type="HBoxContainer" parent="New Motor"]
+layout_mode = 2
+tooltip_text = "The end character for the monitoring of the values of this motor
+motor.monitor_end_char"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorEnd"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Monitor end character"
+fit_content = true
+autowrap_mode = 0
+
+[node name="LineEdit" type="LineEdit" parent="New Motor/MonitorEnd"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MonitorSeparator" type="HBoxContainer" parent="New Motor"]
+layout_mode = 2
+tooltip_text = "The separator of the values of the monitoring
+motor.monitor_separator"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorSeparator"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Monitor separator"
+fit_content = true
+autowrap_mode = 0
+
+[node name="LineEdit" type="LineEdit" parent="New Motor/MonitorSeparator"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "\\t"
+
+[node name="Verbosity" type="HBoxContainer" parent="New Motor"]
+layout_mode = 2
+tooltip_text = "The separator of the values of the monitoring
+motor.monitor_separator"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Verbosity"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Monitor separator"
+fit_content = true
+autowrap_mode = 0
+
+[node name="OptionButton" type="OptionButton" parent="New Motor/Verbosity"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 3
+item_count = 4
+popup/item_0/text = "Nothing"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+popup/item_1/text = "On request"
+popup/item_1/id = 1
+popup/item_1/disabled = true
+popup/item_2/text = "User friendly"
+popup/item_2/id = 2
+popup/item_2/disabled = true
+popup/item_3/text = "Machine readable"
+popup/item_3/id = 3
+
+[node name="Create" type="Button" parent="New Motor"]
+layout_mode = 2
+text = "Create"
+
 [connection signal="pressed" from="Serial/HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
 [connection signal="toggled" from="Serial/HBoxContainer/Connected" to="." method="_on_connected_toggled"]
+[connection signal="pressed" from="New Motor/Create" to="." method="_on_create_pressed"]

@@ -18,11 +18,12 @@ extends commander_field
 func gather_fields() -> Array[String]:
 	return [commander_letter]
 
-func process_line(data: String) -> void:
+func process_line(data: String) -> bool:
 	for i in range(raw_items.size()):
 		var item := raw_items[i]
 		if data.to_lower() == item.to_lower():
 			$OptionButton.select(i)
+	return true
 
 
 func _on_option_button_item_selected(index: int) -> void:

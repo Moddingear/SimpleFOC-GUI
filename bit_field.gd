@@ -26,11 +26,12 @@ func update_active():
 			active.push_back(items[i])
 	on_update.emit(active)
 
-func process_line(data: String) -> void:
+func process_line(data: String) -> bool:
 	for i in range(items.size()):
 		var item : CheckButton = get_child(i)
 		item.set_pressed_no_signal(data[i] == "1")
 	update_active()
+	return true
 
 func _on_field_toggled(toggled_on: bool) -> void:
 	var value = ""
