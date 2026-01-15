@@ -88,13 +88,13 @@ func _on_connected_toggled(toggled_on: bool) -> void:
 		serial_port.clear_buffer()
 		if !serial_port.open():
 			serial_port.close()
-		serial_port.writeline("@3")
 	else:
 		serial_port.close()
 
 func OnChildWantsRefresh(fields:Array[String]) -> void:
 	if !serial_port.is_open():
 		return
+	serial_port.writeline("@3")
 	for field in fields:
 		serial_port.writeline(field)
 

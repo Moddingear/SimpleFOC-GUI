@@ -13,7 +13,7 @@ func comparator(a : Vector2, b : Vector2):
 	return a.x < b.x
 
 func insert_point(key:String, value:float, _time:float):
-	point_storage[key][write_index] = Vector2(float(write_index)/loop_size, 1-value)
+	point_storage[key][write_index] = Vector2(float(write_index)/loop_size, value)
 	if validity_start[key] == posmod(write_index +1, loop_size):
 		validity_start[key] = -1
 
@@ -76,7 +76,8 @@ func get_color(index : int)->Color:
 func draw_lines(graph_rect:Rect2, miny:float, maxy:float) -> void:
 	var scaley = graph_rect.size.y/(maxy-miny)
 	var drawidx :int = 0
-	draw_set_transform(graph_rect.position + Vector2(0, -miny*scaley), 0, Vector2(graph_rect.size.x, scaley))
+	var matrix : Transform2D = Transform2D(Vector2(graph_rect.size.x, 0), Vector2(0, -scaley), graph_rect.position + Vector2(0, maxy*scaley))
+	draw_set_transform_matrix(matrix)
 	#draw_rect(Rect2(0,miny,1,maxy-miny), Color.GREEN)
 	for key in point_storage:
 		var color = get_color(drawidx)

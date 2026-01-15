@@ -17,6 +17,7 @@ var active_lines : Array[String]
 @onready var jog_slider := $VBoxContainer/HBoxContainer/HSlider
 @onready var target_input := $VBoxContainer/HBoxContainer/SpinBox
 var job_dragging = false
+var drag_value :float = 0
 
 func _ready() -> void:
 	print("Available fields: ", gather_fields())
@@ -24,14 +25,15 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if job_dragging:
 		var added_value = delta * pow(jog_slider.value, 2) * 10 * signf(jog_slider.value)
-		var value = target_input.value + added_value
-		set_target(value)
+		drag_value = drag_value + added_value
+		var snapped_value = float("%.3f"%drag_value)
+		set_target(snapped_value)
 	else:
 		jog_slider.set_value_no_signal(0)
 		
 func set_target(value:float) -> void:
 	target_input.set_value_no_signal(value)
-	var command = "%s%f" % [commander_letter, value]
+	var command = "%s%.3f" % [commander_letter, value]
 	SendValue.emit(command)
 
 func _on_refresh_pressed() -> void:
@@ -51,6 +53,7 @@ func process_line(data: String) -> bool:
 		process_monitor(data.rstrip(monitor_end_character))
 		return true
 	elif data.is_valid_float():
+		drag_value = float(data)
 		target_input.set_value_no_signal(float(data))
 		return true
 	else:
@@ -69,7 +72,8 @@ func process_monitor(data:String):
 		graph.advance()
 
 func _on_spin_box_value_changed(value: float) -> void:
-	var command = "%s%f" % [commander_letter, value]
+	drag_value = value
+	var command = "%s%.3f" % [commander_letter, value]
 	SendValue.emit(command)
 
 func _on_monitored_fields_update(active_fields: Array[String]) -> void:
