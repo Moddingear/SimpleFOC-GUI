@@ -104,7 +104,7 @@ func draw_vaxis(graph_rect:Rect2, unit:float, minmax:Vector2) ->void:
 		var alpha : float = float(i) / num_units
 		var pos :Vector2 = bottom_right + Vector2.UP * graph_rect.size.y * alpha
 		var value : float = snappedf(lerpf(minmax.x, minmax.y, alpha), unit)
-		var text : String = "%f" % value
+		var text : String = str(value)
 		var width = graph_rect.size.x/400 * (2 if snappedf(value, unit*10) == value else 1)
 		draw_line(pos + Vector2.LEFT * width, pos+Vector2.RIGHT * width, Color.WHITE)
 		draw_string(ThemeDB.fallback_font, pos + Vector2.RIGHT * width, text, HORIZONTAL_ALIGNMENT_RIGHT)

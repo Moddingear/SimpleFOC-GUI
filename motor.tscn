@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3rld2cit3id"]
+[gd_scene format=3 uid="uid://b3rld2cit3id"]
 
 [ext_resource type="Script" uid="uid://d3a2ugij3mt7k" path="res://motor.gd" id="1_3fr6m"]
 [ext_resource type="Script" uid="uid://dfbefg5nqukis" path="res://buffer_graph.gd" id="1_m1tbe"]
@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dyj20176lmmjw" path="res://PID_field.tscn" id="3_ocnpv"]
 [ext_resource type="Script" uid="uid://dlh2v5xwvbwdg" path="res://bit_field.gd" id="7_m1tbe"]
 
-[node name="Motor" type="GridContainer"]
+[node name="Motor" type="GridContainer" unique_id=45104256]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,25 +21,25 @@ monitor_start_character = "M"
 monitor_end_character = "M"
 commander_letter = "M"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=434841769]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="Refresh" type="Button" parent="VBoxContainer"]
+[node name="Refresh" type="Button" parent="VBoxContainer" unique_id=1135094697]
 layout_mode = 2
 text = "Refresh"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1261277022]
 layout_mode = 2
 
-[node name="Enable" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_ldyvm")]
+[node name="Enable" parent="VBoxContainer/HBoxContainer" unique_id=1907413608 instance=ExtResource("2_ldyvm")]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Enable"
 commander_letter = "E"
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
+[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer" unique_id=652411141]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -51,7 +51,7 @@ step = 0.01
 scrollable = false
 tick_count = 11
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer" unique_id=1165907703]
 layout_mode = 2
 size_flags_horizontal = 3
 step = 0.001
@@ -59,136 +59,136 @@ allow_greater = true
 allow_lesser = true
 prefix = "Target"
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1908256901]
 layout_mode = 2
 current_tab = 8
 
-[node name="Modes" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Modes" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=864701704]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Motion" parent="VBoxContainer/TabContainer/Modes" instance=ExtResource("1_ys34s")]
+[node name="Motion" parent="VBoxContainer/TabContainer/Modes" unique_id=1996355875 instance=ExtResource("1_ys34s")]
 layout_mode = 2
 label = "Motion"
 items = Array[String](["Torque", "Velocity", "Angle", "Velocity open loop", "Angle open loop"])
 raw_items = Array[String](["torque", "vel", "angle", "vel open", "angle open"])
 commander_letter = "C"
 
-[node name="Torque" parent="VBoxContainer/TabContainer/Modes" instance=ExtResource("1_ys34s")]
+[node name="Torque" parent="VBoxContainer/TabContainer/Modes" unique_id=675754427 instance=ExtResource("1_ys34s")]
 layout_mode = 2
 label = "Torque type"
 items = Array[String](["Voltage", "DC current", "FOC current"])
 raw_items = Array[String](["volt", "dc curr", "foc curr"])
 commander_letter = "T"
 
-[node name="PWM" parent="VBoxContainer/TabContainer/Modes" instance=ExtResource("1_ys34s")]
+[node name="PWM" parent="VBoxContainer/TabContainer/Modes" unique_id=332041194 instance=ExtResource("1_ys34s")]
 layout_mode = 2
 label = "PWM"
-items = Array[String](["Sine", "State Vector PWM", "Trapezoid 120", "Trapezoid 150"])
+items = Array[String](["Sine", "Space Vector PWM", "Trapezoid 120", "Trapezoid 150"])
 raw_items = Array[String](["sinepwm", "svpwm", "trap 120", "trap 150"])
 commander_letter = "WT"
 
-[node name="CenterPWM" parent="VBoxContainer/TabContainer/Modes" instance=ExtResource("2_ldyvm")]
+[node name="CenterPWM" parent="VBoxContainer/TabContainer/Modes" unique_id=723209457 instance=ExtResource("2_ldyvm")]
 layout_mode = 2
 text = "PWM Centering"
 commander_letter = "WC"
 
-[node name="Motor constants" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Motor constants" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1077678960]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Resistance" parent="VBoxContainer/TabContainer/Motor constants" instance=ExtResource("2_ocnpv")]
+[node name="Resistance" parent="VBoxContainer/TabContainer/Motor constants" unique_id=737371936 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Resistance"
 commander_letter = "R"
 
-[node name="Inductance" parent="VBoxContainer/TabContainer/Motor constants" instance=ExtResource("2_ocnpv")]
+[node name="Inductance" parent="VBoxContainer/TabContainer/Motor constants" unique_id=565530942 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Inductance"
 commander_letter = "I"
 
-[node name="KV" parent="VBoxContainer/TabContainer/Motor constants" instance=ExtResource("2_ocnpv")]
+[node name="KV" parent="VBoxContainer/TabContainer/Motor constants" unique_id=1850900952 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "KV"
 commander_letter = "K"
 
-[node name="Sensor offsets" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Sensor offsets" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=225530935]
 visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "S"
 metadata/_tab_index = 2
 
-[node name="Shaft offset" parent="VBoxContainer/TabContainer/Sensor offsets" instance=ExtResource("2_ocnpv")]
+[node name="Shaft offset" parent="VBoxContainer/TabContainer/Sensor offsets" unique_id=1982991202 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Shaft offset"
 commander_letter = "M"
 
-[node name="Electrical offset" parent="VBoxContainer/TabContainer/Sensor offsets" instance=ExtResource("2_ocnpv")]
+[node name="Electrical offset" parent="VBoxContainer/TabContainer/Sensor offsets" unique_id=355737006 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Electrical offset"
 commander_letter = "E"
 
-[node name="Limits" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Limits" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=218605192]
 visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "L"
 metadata/_tab_index = 3
 
-[node name="Voltage" parent="VBoxContainer/TabContainer/Limits" instance=ExtResource("2_ocnpv")]
+[node name="Voltage" parent="VBoxContainer/TabContainer/Limits" unique_id=1745031848 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Voltage"
 commander_letter = "U"
 
-[node name="Current" parent="VBoxContainer/TabContainer/Limits" instance=ExtResource("2_ocnpv")]
+[node name="Current" parent="VBoxContainer/TabContainer/Limits" unique_id=1522889403 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Current"
 commander_letter = "C"
 
-[node name="Velocity" parent="VBoxContainer/TabContainer/Limits" instance=ExtResource("2_ocnpv")]
+[node name="Velocity" parent="VBoxContainer/TabContainer/Limits" unique_id=179456244 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Velocity"
 commander_letter = "V"
 
-[node name="Q Current PID" parent="VBoxContainer/TabContainer" instance=ExtResource("3_ocnpv")]
+[node name="Q Current PID" parent="VBoxContainer/TabContainer" unique_id=983066140 instance=ExtResource("3_ocnpv")]
 visible = false
 layout_mode = 2
 commander_letter = "Q"
 metadata/_tab_index = 4
 
-[node name="D current PID" parent="VBoxContainer/TabContainer" instance=ExtResource("3_ocnpv")]
+[node name="D current PID" parent="VBoxContainer/TabContainer" unique_id=1596088254 instance=ExtResource("3_ocnpv")]
 visible = false
 layout_mode = 2
 commander_letter = "D"
 metadata/_tab_index = 5
 
-[node name="Velocity PID" parent="VBoxContainer/TabContainer" instance=ExtResource("3_ocnpv")]
+[node name="Velocity PID" parent="VBoxContainer/TabContainer" unique_id=778778839 instance=ExtResource("3_ocnpv")]
 visible = false
 layout_mode = 2
 commander_letter = "V"
 metadata/_tab_index = 6
 
-[node name="Angle PID" parent="VBoxContainer/TabContainer" instance=ExtResource("3_ocnpv")]
+[node name="Angle PID" parent="VBoxContainer/TabContainer" unique_id=1855973384 instance=ExtResource("3_ocnpv")]
 visible = false
 layout_mode = 2
 commander_letter = "A"
 metadata/_tab_index = 7
 
-[node name="Monitoring" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Monitoring" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1232889258]
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "M"
 metadata/_tab_index = 8
 
-[node name="Downsample" parent="VBoxContainer/TabContainer/Monitoring" instance=ExtResource("2_ocnpv")]
+[node name="Downsample" parent="VBoxContainer/TabContainer/Monitoring" unique_id=134504222 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Downsample"
 commander_letter = "D"
 
-[node name="monitor variables" type="HFlowContainer" parent="VBoxContainer/TabContainer/Monitoring"]
+[node name="monitor variables" type="HFlowContainer" parent="VBoxContainer/TabContainer/Monitoring" unique_id=717829944]
 layout_mode = 2
 alignment = 1
 last_wrap_alignment = 2
@@ -196,21 +196,21 @@ script = ExtResource("7_m1tbe")
 items = Array[String](["Target", "Voltage Q", "Voltage D", "Current Q", "Current D", "Velocity", "Angle"])
 commander_letter = "S"
 
-[node name="current_graph" type="Control" parent="."]
+[node name="current_graph" type="Control" parent="." unique_id=1975217982]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
-[node name="voltage_graph" type="Control" parent="."]
+[node name="voltage_graph" type="Control" parent="." unique_id=1908574964]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
-[node name="radians_graph" type="Control" parent="."]
+[node name="radians_graph" type="Control" parent="." unique_id=48162067]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
