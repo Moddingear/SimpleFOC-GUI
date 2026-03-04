@@ -106,18 +106,21 @@ layout_mode = 2
 tooltip_text = "Will reinit the motor"
 text = "Reinit"
 commander_letter = "R"
+silent = true
 
 [node name="MeasParameters" parent="VBoxContainer/TabContainer/FOC Control" unique_id=1801398962 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Will use the provided voltage to extract the motor parameter (inductance, resistance, electrical angle)"
 label = "Measure parameters"
 commander_letter = "P"
 silent = true
 
-[node name="TuneCurrent" parent="VBoxContainer/TabContainer/FOC Control" unique_id=1832374400 instance=ExtResource("5_c6xex")]
+[node name="TuneCurrent" parent="VBoxContainer/TabContainer/FOC Control" unique_id=454149549 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
-tooltip_text = "Will reinit the motor"
-text = "Autotune current PID"
+tooltip_text = "Will use the provided bandwidth to tune the current PIDs"
+label = "Tune current PIDs"
 commander_letter = "C"
+silent = true
 
 [node name="Motor constants" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1077678960]
 visible = false
