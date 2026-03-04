@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cnjs0d8o40ma5"]
+
+[ext_resource type="Script" uid="uid://demjxwixpuw40" path="res://button_field.gd" id="1_2ltho"]
+
+[node name="ButtonField" type="Button" unique_id=1605428690]
+script = ExtResource("1_2ltho")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

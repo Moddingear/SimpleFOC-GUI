@@ -7,6 +7,7 @@ signal SendValue(command:String)
 
 #Letter to be intercepted. If empty, acts as a passthrough
 @export var commander_letter : String = ""
+@export var silent := false
 
 var field_map : Dictionary[String, commander_field] = {}
 
@@ -15,6 +16,8 @@ func gather_fields() -> Array[String]:
 	var retval : Array[String] = []
 	for key in field_map:
 		var child := field_map[key]
+		if child.silent:
+			continue
 		var child_fields = child.gather_fields()
 		for field in child_fields:
 			retval.push_back(commander_letter + field)
