@@ -19,6 +19,10 @@ run/main_scene="uid://c1onhculuqywq"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/subwindows/embed_subwindows=false
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gdserial/plugin.cfg", "res://addons/graph_2d/plugin.cfg")

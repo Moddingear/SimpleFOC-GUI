@@ -6,16 +6,16 @@ class_name motor
 @export var monitor_end_character = ""
 var monitor_split_character = "\t"
 
-@onready var monitored_fields := $"VBoxContainer/TabContainer/Monitoring/monitor variables"
-@onready var graphs : Dictionary[String, buffer_graph] = {"Current":$current_graph, "Voltage":$voltage_graph, "Radians":$radians_graph}
-@onready var graph_lines : Dictionary[String, buffer_graph] = {"Target": $radians_graph, 
-	"Voltage Q":$voltage_graph, "Voltage D":$voltage_graph, 
-	"Current Q":$current_graph, "Current D":$current_graph, 
-	"Velocity":$radians_graph, "Angle":$radians_graph}
+@onready var monitored_fields := %"monitor variables"
+@onready var graphs : Dictionary[String, buffer_graph] = {"Current":%current_graph, "Voltage":%voltage_graph, "Radians":%radians_graph}
+@onready var graph_lines : Dictionary[String, buffer_graph] = {"Target": %radians_graph, 
+	"Voltage Q":%voltage_graph, "Voltage D":%voltage_graph, 
+	"Current Q":%current_graph, "Current D":%current_graph, 
+	"Velocity":%radians_graph, "Angle":%radians_graph}
 var active_lines : Array[String]
 
-@onready var jog_slider := $VBoxContainer/HBoxContainer/HSlider
-@onready var target_input := $VBoxContainer/HBoxContainer/SpinBox
+@onready var jog_slider := %jog_slider
+@onready var target_input := %target_input
 var job_dragging = false
 var drag_value :float = 0
 

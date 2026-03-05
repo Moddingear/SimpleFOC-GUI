@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1onhculuqywq"]
+[gd_scene format=3 uid="uid://c1onhculuqywq"]
 
 [ext_resource type="Script" uid="uid://cy8wsdow5s4e4" path="res://top.gd" id="1_rl3jk"]
 
-[node name="Control" type="TabContainer"]
+[node name="Control" type="TabContainer" unique_id=1922695316]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,116 +11,121 @@ grow_vertical = 2
 current_tab = 1
 script = ExtResource("1_rl3jk")
 
-[node name="Serial" type="VBoxContainer" parent="."]
+[node name="Serial" type="VBoxContainer" parent="." unique_id=1743622908]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Serial"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Serial" unique_id=831789347]
 layout_mode = 2
 
-[node name="Refresh" type="Button" parent="Serial/HBoxContainer"]
+[node name="Refresh" type="Button" parent="Serial/HBoxContainer" unique_id=1614833666]
 layout_mode = 2
 text = "Refresh ports"
 
-[node name="Port" type="OptionButton" parent="Serial/HBoxContainer"]
+[node name="Port" type="OptionButton" parent="Serial/HBoxContainer" unique_id=645813672]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BaudRate" type="OptionButton" parent="Serial/HBoxContainer"]
+[node name="BaudRate" type="OptionButton" parent="Serial/HBoxContainer" unique_id=1490195818]
 layout_mode = 2
 
-[node name="Connected" type="CheckButton" parent="Serial/HBoxContainer"]
+[node name="Connected" type="CheckButton" parent="Serial/HBoxContainer" unique_id=1736492719]
 layout_mode = 2
 text = "Connect"
 
-[node name="Serial output" type="RichTextLabel" parent="Serial"]
+[node name="Serial output" type="RichTextLabel" parent="Serial" unique_id=1730433617]
 layout_mode = 2
 size_flags_vertical = 3
 scroll_following = true
 
-[node name="New Motor" type="VBoxContainer" parent="."]
+[node name="New Motor" type="VBoxContainer" parent="." unique_id=1297014434]
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Character" type="HBoxContainer" parent="New Motor"]
+[node name="Character" type="HBoxContainer" parent="New Motor" unique_id=175303398]
 layout_mode = 2
 tooltip_text = "The character to which the commander answers for this motor"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Character"]
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Character" unique_id=1225538126]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Character"
 fit_content = true
 autowrap_mode = 0
 
-[node name="LineEdit" type="LineEdit" parent="New Motor/Character"]
+[node name="CommanderLetter" type="LineEdit" parent="New Motor/Character" unique_id=1224659086]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "M"
 
-[node name="MonitorBegin" type="HBoxContainer" parent="New Motor"]
+[node name="MonitorBegin" type="HBoxContainer" parent="New Motor" unique_id=173757149]
 layout_mode = 2
 tooltip_text = "The begin character for the monitoring of the values of this motor
 motor.monitor_start_char"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorBegin"]
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorBegin" unique_id=991963170]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor start character"
 fit_content = true
 autowrap_mode = 0
 
-[node name="LineEdit" type="LineEdit" parent="New Motor/MonitorBegin"]
+[node name="StartChar" type="LineEdit" parent="New Motor/MonitorBegin" unique_id=791198119]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MonitorEnd" type="HBoxContainer" parent="New Motor"]
+[node name="MonitorEnd" type="HBoxContainer" parent="New Motor" unique_id=338582353]
 layout_mode = 2
 tooltip_text = "The end character for the monitoring of the values of this motor
 motor.monitor_end_char"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorEnd"]
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorEnd" unique_id=1573637856]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor end character"
 fit_content = true
 autowrap_mode = 0
 
-[node name="LineEdit" type="LineEdit" parent="New Motor/MonitorEnd"]
+[node name="EndChar" type="LineEdit" parent="New Motor/MonitorEnd" unique_id=1140864772]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MonitorSeparator" type="HBoxContainer" parent="New Motor"]
+[node name="MonitorSeparator" type="HBoxContainer" parent="New Motor" unique_id=1563301194]
 layout_mode = 2
 tooltip_text = "The separator of the values of the monitoring
 motor.monitor_separator"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorSeparator"]
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorSeparator" unique_id=1779430622]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor separator"
 fit_content = true
 autowrap_mode = 0
 
-[node name="LineEdit" type="LineEdit" parent="New Motor/MonitorSeparator"]
+[node name="SeparatorChar" type="LineEdit" parent="New Motor/MonitorSeparator" unique_id=1301421704]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "\\t"
 
-[node name="Verbosity" type="HBoxContainer" parent="New Motor"]
+[node name="Verbosity" type="HBoxContainer" parent="New Motor" unique_id=997425969]
 layout_mode = 2
 tooltip_text = "The separator of the values of the monitoring
 motor.monitor_separator"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Verbosity"]
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Verbosity" unique_id=25166828]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Monitor separator"
+text = "Verbosity"
 fit_content = true
 autowrap_mode = 0
 
-[node name="OptionButton" type="OptionButton" parent="New Motor/Verbosity"]
+[node name="VerbosityOption" type="OptionButton" parent="New Motor/Verbosity" unique_id=306708894]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 3
@@ -137,7 +142,27 @@ popup/item_2/disabled = true
 popup/item_3/text = "Machine readable"
 popup/item_3/id = 3
 
-[node name="Create" type="Button" parent="New Motor"]
+[node name="DecimalPlaces" type="HBoxContainer" parent="New Motor" unique_id=808314434]
+layout_mode = 2
+tooltip_text = "The separator of the values of the monitoring
+motor.monitor_separator"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/DecimalPlaces" unique_id=165383986]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Number of decimal places"
+fit_content = true
+autowrap_mode = 0
+
+[node name="DecimalBox" type="SpinBox" parent="New Motor/DecimalPlaces" unique_id=84354066]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+value = 8.0
+rounded = true
+
+[node name="Create" type="Button" parent="New Motor" unique_id=1208867739]
 layout_mode = 2
 text = "Create"
 

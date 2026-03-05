@@ -10,13 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://cnjs0d8o40ma5" path="res://button_field.tscn" id="5_c6xex"]
 [ext_resource type="Script" uid="uid://dlh2v5xwvbwdg" path="res://bit_field.gd" id="7_m1tbe"]
 
-[node name="Motor" type="GridContainer" unique_id=45104256]
+[node name="Motor" type="VBoxContainer" unique_id=565426516]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 2
 script = ExtResource("1_3fr6m")
 monitor_start_character = "M"
 monitor_end_character = "M"
@@ -40,7 +39,8 @@ size_flags_horizontal = 3
 text = "Enable"
 commander_letter = "E"
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer" unique_id=652411141]
+[node name="jog_slider" type="HSlider" parent="VBoxContainer/HBoxContainer" unique_id=652411141]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -52,7 +52,8 @@ step = 0.01
 scrollable = false
 tick_count = 11
 
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer" unique_id=1165907703]
+[node name="target_input" type="SpinBox" parent="VBoxContainer/HBoxContainer" unique_id=1165907703]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 step = 0.001
@@ -62,25 +63,24 @@ prefix = "Target"
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1908256901]
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 
-[node name="Modes" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=864701704]
-visible = false
+[node name="Modes" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=616022642]
 layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="Motion" parent="VBoxContainer/TabContainer/Modes" unique_id=1996355875 instance=ExtResource("1_ys34s")]
 layout_mode = 2
 label = "Motion"
-items = Array[String](["Torque", "Velocity", "Angle", "Velocity open loop", "Angle open loop"])
-raw_items = Array[String](["torque", "vel", "angle", "vel open", "angle open"])
+items = Array[String](["Torque", "Velocity", "Angle", "Velocity open loop", "Angle open loop", "Angle no cascade", "Custom"])
+raw_items = Array[String](["torque", "vel", "angle", "vel open", "angle open", "angle nocascade", "custom"])
 commander_letter = "C"
 
 [node name="Torque" parent="VBoxContainer/TabContainer/Modes" unique_id=675754427 instance=ExtResource("1_ys34s")]
 layout_mode = 2
 label = "Torque type"
-items = Array[String](["Voltage", "DC current", "FOC current"])
-raw_items = Array[String](["volt", "dc curr", "foc curr"])
+items = Array[String](["Voltage", "DC current", "FOC current", "Estimated Current"])
+raw_items = Array[String](["volt", "dc curr", "foc curr", "est. curr"])
 commander_letter = "T"
 
 [node name="PWM" parent="VBoxContainer/TabContainer/Modes" unique_id=332041194 instance=ExtResource("1_ys34s")]
@@ -96,6 +96,7 @@ text = "PWM Centering"
 commander_letter = "WC"
 
 [node name="FOC Control" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1840096400]
+visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "F"
@@ -133,10 +134,16 @@ label = "Resistance"
 commander_letter = "R"
 silent = false
 
-[node name="Inductance" parent="VBoxContainer/TabContainer/Motor constants" unique_id=565530942 instance=ExtResource("2_ocnpv")]
+[node name="InductanceD" parent="VBoxContainer/TabContainer/Motor constants" unique_id=565530942 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
-label = "Inductance"
-commander_letter = "I"
+label = "Inductance D"
+commander_letter = "ID"
+silent = false
+
+[node name="InductanceQ" parent="VBoxContainer/TabContainer/Motor constants" unique_id=559513404 instance=ExtResource("2_ocnpv")]
+layout_mode = 2
+label = "Inductance Q"
+commander_letter = "IQ"
 silent = false
 
 [node name="KV" parent="VBoxContainer/TabContainer/Motor constants" unique_id=1850900952 instance=ExtResource("2_ocnpv")]
@@ -227,29 +234,36 @@ commander_letter = "D"
 silent = false
 
 [node name="monitor variables" type="HFlowContainer" parent="VBoxContainer/TabContainer/Monitoring" unique_id=717829944]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 last_wrap_alignment = 2
 script = ExtResource("7_m1tbe")
 items = Array[String](["Target", "Voltage Q", "Voltage D", "Current Q", "Current D", "Velocity", "Angle"])
 commander_letter = "S"
-silent = null
 
-[node name="current_graph" type="Control" parent="." unique_id=1975217982]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=698183544]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="current_graph" type="Control" parent="HBoxContainer" unique_id=1975217982]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
-[node name="voltage_graph" type="Control" parent="." unique_id=1908574964]
+[node name="voltage_graph" type="Control" parent="HBoxContainer" unique_id=1908574964]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
-[node name="radians_graph" type="Control" parent="." unique_id=48162067]
+[node name="radians_graph" type="Control" parent="HBoxContainer" unique_id=48162067]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -257,7 +271,7 @@ script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
 [connection signal="pressed" from="VBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
-[connection signal="drag_ended" from="VBoxContainer/HBoxContainer/HSlider" to="." method="_on_h_slider_drag_ended"]
-[connection signal="drag_started" from="VBoxContainer/HBoxContainer/HSlider" to="." method="_on_h_slider_drag_started"]
-[connection signal="value_changed" from="VBoxContainer/HBoxContainer/SpinBox" to="." method="_on_spin_box_value_changed"]
+[connection signal="drag_ended" from="VBoxContainer/HBoxContainer/jog_slider" to="." method="_on_h_slider_drag_ended"]
+[connection signal="drag_started" from="VBoxContainer/HBoxContainer/jog_slider" to="." method="_on_h_slider_drag_started"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/target_input" to="." method="_on_spin_box_value_changed"]
 [connection signal="on_update" from="VBoxContainer/TabContainer/Monitoring/monitor variables" to="." method="_on_monitored_fields_update"]

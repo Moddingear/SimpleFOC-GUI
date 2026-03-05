@@ -111,10 +111,11 @@ func _on_refresh_pressed() -> void:
 
 func _on_create_pressed() -> void:
 	var nmotor := motor_scene.instantiate()
-	nmotor.monitor_start_character = $"New Motor/MonitorBegin/LineEdit".text.c_unescape()
-	nmotor.monitor_end_character = $"New Motor/MonitorEnd/LineEdit".text.c_unescape()
-	nmotor.monitor_split_character = $"New Motor/MonitorSeparator/LineEdit".text.c_unescape()
-	nmotor.commander_letter = $"New Motor/Character/LineEdit".text.c_unescape()
+	nmotor.monitor_start_character = %StartChar.text.c_unescape()
+	nmotor.monitor_end_character = %EndChar.text.c_unescape()
+	nmotor.monitor_split_character = %SeparatorChar.text.c_unescape()
+	nmotor.commander_letter = %CommanderLetter.text.c_unescape()
+	OnChildSendValue("#%d" % int(%DecimalBox.value))
 	nmotor.name = "Motor " + nmotor.commander_letter
 	motor_monitor_keys[nmotor.monitor_start_character] = nmotor
 	add_child(nmotor)
