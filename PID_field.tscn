@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyj20176lmmjw"]
+[gd_scene format=3 uid="uid://dyj20176lmmjw"]
 
-[ext_resource type="PackedScene" uid="uid://daq02p4ix4pk1" path="res://number_field.tscn" id="1_0tluy"]
-[ext_resource type="Script" uid="uid://cu3djabyykbmm" path="res://commander_field.gd" id="1_sbg42"]
+[ext_resource type="PackedScene" uid="uid://daq02p4ix4pk1" path="res://commander_fields/number_field.tscn" id="1_0tluy"]
+[ext_resource type="Script" uid="uid://cu3djabyykbmm" path="res://commander_fields/commander_field.gd" id="1_sbg42"]
 
 [node name="PIDField" type="VBoxContainer"]
 anchors_preset = 15

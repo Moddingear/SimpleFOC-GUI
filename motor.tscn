@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://d3a2ugij3mt7k" path="res://motor.gd" id="1_3fr6m"]
 [ext_resource type="Script" uid="uid://dfbefg5nqukis" path="res://buffer_graph.gd" id="1_m1tbe"]
-[ext_resource type="Script" uid="uid://cu3djabyykbmm" path="res://commander_field.gd" id="1_xbv7l"]
-[ext_resource type="PackedScene" uid="uid://dn8mhjs72vree" path="res://dropdown_field.tscn" id="1_ys34s"]
-[ext_resource type="PackedScene" uid="uid://dxe6335krl6ab" path="res://boolean_field.tscn" id="2_ldyvm"]
-[ext_resource type="PackedScene" uid="uid://daq02p4ix4pk1" path="res://number_field.tscn" id="2_ocnpv"]
+[ext_resource type="Script" uid="uid://cu3djabyykbmm" path="res://commander_fields/commander_field.gd" id="1_xbv7l"]
+[ext_resource type="PackedScene" uid="uid://dn8mhjs72vree" path="res://commander_fields/dropdown_field.tscn" id="1_ys34s"]
+[ext_resource type="PackedScene" uid="uid://dxe6335krl6ab" path="res://commander_fields/boolean_field.tscn" id="2_ldyvm"]
+[ext_resource type="PackedScene" uid="uid://daq02p4ix4pk1" path="res://commander_fields/number_field.tscn" id="2_ocnpv"]
 [ext_resource type="PackedScene" uid="uid://dyj20176lmmjw" path="res://PID_field.tscn" id="3_ocnpv"]
-[ext_resource type="PackedScene" uid="uid://cnjs0d8o40ma5" path="res://button_field.tscn" id="5_c6xex"]
-[ext_resource type="Script" uid="uid://dlh2v5xwvbwdg" path="res://bit_field.gd" id="7_m1tbe"]
+[ext_resource type="PackedScene" uid="uid://cnjs0d8o40ma5" path="res://commander_fields/button_field.tscn" id="5_c6xex"]
+[ext_resource type="Script" uid="uid://dlh2v5xwvbwdg" path="res://commander_fields/bit_field.gd" id="7_m1tbe"]
 
 [node name="Motor" type="VBoxContainer" unique_id=565426516]
 anchors_preset = 15
@@ -132,25 +132,21 @@ metadata/_tab_index = 2
 layout_mode = 2
 label = "Resistance"
 commander_letter = "R"
-silent = false
 
 [node name="InductanceD" parent="VBoxContainer/TabContainer/Motor constants" unique_id=565530942 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Inductance D"
 commander_letter = "ID"
-silent = false
 
 [node name="InductanceQ" parent="VBoxContainer/TabContainer/Motor constants" unique_id=559513404 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Inductance Q"
 commander_letter = "IQ"
-silent = false
 
 [node name="KV" parent="VBoxContainer/TabContainer/Motor constants" unique_id=1850900952 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "KV"
 commander_letter = "K"
-silent = false
 
 [node name="Sensor offsets" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=225530935]
 visible = false
@@ -163,13 +159,11 @@ metadata/_tab_index = 3
 layout_mode = 2
 label = "Shaft offset"
 commander_letter = "M"
-silent = false
 
 [node name="Electrical offset" parent="VBoxContainer/TabContainer/Sensor offsets" unique_id=355737006 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Electrical offset"
 commander_letter = "E"
-silent = false
 
 [node name="Limits" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=218605192]
 visible = false
@@ -182,19 +176,16 @@ metadata/_tab_index = 4
 layout_mode = 2
 label = "Voltage"
 commander_letter = "U"
-silent = false
 
 [node name="Current" parent="VBoxContainer/TabContainer/Limits" unique_id=1522889403 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Current"
 commander_letter = "C"
-silent = false
 
 [node name="Velocity" parent="VBoxContainer/TabContainer/Limits" unique_id=179456244 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
 label = "Velocity"
 commander_letter = "V"
-silent = false
 
 [node name="Q Current PID" parent="VBoxContainer/TabContainer" unique_id=983066140 instance=ExtResource("3_ocnpv")]
 visible = false
@@ -231,7 +222,6 @@ metadata/_tab_index = 9
 layout_mode = 2
 label = "Downsample"
 commander_letter = "D"
-silent = false
 
 [node name="monitor variables" type="HFlowContainer" parent="VBoxContainer/TabContainer/Monitoring" unique_id=717829944]
 unique_name_in_owner = true
@@ -242,36 +232,85 @@ script = ExtResource("7_m1tbe")
 items = Array[String](["Target", "Voltage Q", "Voltage D", "Current Q", "Current D", "Velocity", "Angle"])
 commander_letter = "S"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=698183544]
+[node name="GraphContainer" type="HBoxContainer" parent="." unique_id=698183544]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="current_graph" type="Control" parent="HBoxContainer" unique_id=1975217982]
+[node name="current_graph" type="Control" parent="GraphContainer" unique_id=1975217982]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
-[node name="voltage_graph" type="Control" parent="HBoxContainer" unique_id=1908574964]
+[node name="voltage_graph" type="Control" parent="GraphContainer" unique_id=1908574964]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
 
-[node name="radians_graph" type="Control" parent="HBoxContainer" unique_id=48162067]
+[node name="radians_graph" type="Control" parent="GraphContainer" unique_id=48162067]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_m1tbe")
 metadata/_custom_type_script = "uid://dfbefg5nqukis"
+
+[node name="Graph_buttons_container" type="HBoxContainer" parent="." unique_id=1191222173]
+layout_mode = 2
+
+[node name="PauseButton" type="CheckButton" parent="Graph_buttons_container" unique_id=827589968]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pause graph"
+alignment = 2
+
+[node name="RolloverButton" type="CheckButton" parent="Graph_buttons_container" unique_id=515887951]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "Graph Rollover"
+alignment = 2
+
+[node name="PointsBox" type="SpinBox" parent="Graph_buttons_container" unique_id=1250751182]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Number of points to accumulate in graphs"
+min_value = 1000.0
+max_value = 1000.0
+value = 1000.0
+rounded = true
+allow_greater = true
+suffix = "points"
+
+[node name="ClearButton" type="Button" parent="Graph_buttons_container" unique_id=1023996125]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Clear accumulated data in graphs"
+text = "Clear graphs"
+
+[node name="SaveButton" type="Button" parent="Graph_buttons_container" unique_id=536644062]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Not available right now"
+disabled = true
+text = "Save settings"
 
 [connection signal="pressed" from="VBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
 [connection signal="drag_ended" from="VBoxContainer/HBoxContainer/jog_slider" to="." method="_on_h_slider_drag_ended"]
 [connection signal="drag_started" from="VBoxContainer/HBoxContainer/jog_slider" to="." method="_on_h_slider_drag_started"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/target_input" to="." method="_on_spin_box_value_changed"]
 [connection signal="on_update" from="VBoxContainer/TabContainer/Monitoring/monitor variables" to="." method="_on_monitored_fields_update"]
+[connection signal="toggled" from="Graph_buttons_container/RolloverButton" to="." method="_on_rollover_button_toggled"]
+[connection signal="value_changed" from="Graph_buttons_container/PointsBox" to="." method="_on_points_box_value_changed"]
+[connection signal="pressed" from="Graph_buttons_container/ClearButton" to="." method="_on_clear_button_pressed"]
+[connection signal="pressed" from="Graph_buttons_container/SaveButton" to="." method="_on_save_button_pressed"]

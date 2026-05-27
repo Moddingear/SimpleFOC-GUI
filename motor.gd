@@ -61,6 +61,8 @@ func process_line(data: String) -> bool:
 
 #data : no start/end character
 func process_monitor(data:String):
+	if %PauseButton.button_pressed:
+		return
 	var split_data = data.split(monitor_split_character)
 	if split_data.size() != active_lines.size():
 		return
@@ -95,3 +97,17 @@ func _on_h_slider_drag_ended(value_changed: bool) -> void:
 
 func _on_h_slider_drag_started() -> void:
 	job_dragging = true
+
+func _on_points_box_value_changed(value: float) -> void:
+	for key in graphs:
+		graphs[key].loop_size = value
+
+
+func _on_clear_button_pressed() -> void:
+	for key in graphs:
+		graphs[key].clear()
+
+
+func _on_rollover_button_toggled(toggled_on: bool) -> void:
+	for key in graphs:
+		graphs[key].rollover = toggled_on

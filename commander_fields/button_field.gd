@@ -3,7 +3,7 @@ extends commander_field
 func gather_fields() -> Array[String]:
 	return []
 
-func process_line(data: String) -> bool:
+func process_line(_data: String) -> bool:
 	return true
 
 func _on_pressed() -> void:

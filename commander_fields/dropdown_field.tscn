@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dn8mhjs72vree"]
+[gd_scene format=3 uid="uid://dn8mhjs72vree"]
 
-[ext_resource type="Script" uid="uid://yqnmb50wvwqv" path="res://dropdown_field.gd" id="1_aw8c1"]
+[ext_resource type="Script" uid="uid://yqnmb50wvwqv" path="res://commander_fields/dropdown_field.gd" id="1_aw8c1"]
 
 [node name="HBox" type="HBoxContainer"]
 script = ExtResource("1_aw8c1")

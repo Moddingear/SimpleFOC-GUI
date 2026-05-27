@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://daq02p4ix4pk1"]
 
-[ext_resource type="Script" uid="uid://cmycfhqqr3ivy" path="res://number_field.gd" id="1_86rjn"]
+[ext_resource type="Script" uid="uid://cmycfhqqr3ivy" path="res://commander_fields/number_field.gd" id="1_86rjn"]
 
 [node name="HBox" type="HBoxContainer" unique_id=454149549]
 script = ExtResource("1_86rjn")
-silent = null
+
+[node name="Watch" type="CheckButton" parent="." unique_id=2041461223]
+layout_mode = 2
+tooltip_text = "Watch value"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=150257212]
 layout_mode = 2

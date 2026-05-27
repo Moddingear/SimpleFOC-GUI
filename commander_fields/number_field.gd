@@ -1,18 +1,37 @@
 @tool
 extends commander_field
 
+@onready var watch_box := $Watch
+var last_watch_ms = 0
+
 @export var label:String = "":
 	set(value):
 		label = value
 		get_node("RichTextLabel").text = value
 
+func set_silent(new_value:bool):
+	silent = new_value
+	if watch_box:
+		watch_box.visible = !new_value
+
 func gather_fields() -> Array[String]:
 	return [commander_letter]
 
 func process_line(data: String) -> bool:
-	$SpinBox.set_value_no_signal(float(data))
+	var value := float(data)
+	if value == -12345:
+		$SpinBox.set_value_no_signal(NAN)
+	else:
+		$SpinBox.set_value_no_signal(value)
 	return true
 
 func _on_spin_box_value_changed(value: float) -> void:
 	var command := "%s%f" % [commander_letter, value]
 	SendValue.emit(command)
+
+func _process(_delta: float) -> void:
+	if watch_box.button_pressed:
+		var this_loop_ms = Time.get_ticks_msec()
+		if this_loop_ms - last_watch_ms >= 1000:
+			last_watch_ms = this_loop_ms
+			SendValue.emit(commander_letter)

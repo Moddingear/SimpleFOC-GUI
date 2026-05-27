@@ -7,7 +7,11 @@ signal SendValue(command:String)
 
 #Letter to be intercepted. If empty, acts as a passthrough
 @export var commander_letter : String = ""
-@export var silent := false
+@export var silent :bool = false:
+	set = set_silent
+
+func set_silent(new_value:bool):
+	silent = new_value
 
 var field_map : Dictionary[String, commander_field] = {}
 
@@ -46,7 +50,7 @@ func _exit_tree() -> void:
 
 func process_line(data: String) -> bool:
 	var best_match := ""
-	var motor_match : motor = null
+	#var motor_match : motor = null
 	for key in field_map:
 		if data.begins_with(key) && key.length() > best_match.length():
 			best_match = key
