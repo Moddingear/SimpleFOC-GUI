@@ -63,14 +63,16 @@ prefix = "Target"
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1908256901]
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Modes" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=616022642]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="Motion" parent="VBoxContainer/TabContainer/Modes" unique_id=1996355875 instance=ExtResource("1_ys34s")]
 layout_mode = 2
+tooltip_text = "Motion control mode"
 label = "Motion"
 items = Array[String](["Torque", "Velocity", "Angle", "Velocity open loop", "Angle open loop", "Angle no cascade", "Custom"])
 raw_items = Array[String](["torque", "vel", "angle", "vel open", "angle open", "angle nocascade", "custom"])
@@ -78,6 +80,7 @@ commander_letter = "C"
 
 [node name="Torque" parent="VBoxContainer/TabContainer/Modes" unique_id=675754427 instance=ExtResource("1_ys34s")]
 layout_mode = 2
+tooltip_text = "Torque control source"
 label = "Torque type"
 items = Array[String](["Voltage", "DC current", "FOC current", "Estimated Current"])
 raw_items = Array[String](["volt", "dc curr", "foc curr", "est. curr"])
@@ -96,7 +99,6 @@ text = "PWM Centering"
 commander_letter = "WC"
 
 [node name="FOC Control" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1840096400]
-visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "F"
@@ -130,21 +132,25 @@ metadata/_tab_index = 2
 
 [node name="Resistance" parent="VBoxContainer/TabContainer/Motor constants" unique_id=737371936 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Phase resistance, in ohms"
 label = "Resistance"
 commander_letter = "R"
 
 [node name="InductanceD" parent="VBoxContainer/TabContainer/Motor constants" unique_id=565530942 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Phase inductance in the direct axis, in henries"
 label = "Inductance D"
 commander_letter = "ID"
 
 [node name="InductanceQ" parent="VBoxContainer/TabContainer/Motor constants" unique_id=559513404 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Phase inductance in the quadrature axis, in henries"
 label = "Inductance Q"
 commander_letter = "IQ"
 
 [node name="KV" parent="VBoxContainer/TabContainer/Motor constants" unique_id=1850900952 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Motor speed constant, in rpm/Volt"
 label = "KV"
 commander_letter = "K"
 
@@ -157,11 +163,13 @@ metadata/_tab_index = 3
 
 [node name="Shaft offset" parent="VBoxContainer/TabContainer/Sensor offsets" unique_id=1982991202 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Use angle shaft offset, in radians"
 label = "Shaft offset"
 commander_letter = "M"
 
 [node name="Electrical offset" parent="VBoxContainer/TabContainer/Sensor offsets" unique_id=355737006 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Offset between encoder and shaft, in radians"
 label = "Electrical offset"
 commander_letter = "E"
 
@@ -174,16 +182,19 @@ metadata/_tab_index = 4
 
 [node name="Voltage" parent="VBoxContainer/TabContainer/Limits" unique_id=1745031848 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Maximum voltage to be applied to motor phases, in volts"
 label = "Voltage"
 commander_letter = "U"
 
 [node name="Current" parent="VBoxContainer/TabContainer/Limits" unique_id=1522889403 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Maximum current to be applied in motor phases, in amperes"
 label = "Current"
 commander_letter = "C"
 
 [node name="Velocity" parent="VBoxContainer/TabContainer/Limits" unique_id=179456244 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Maximum velocity allowed to the motor, in rad/s"
 label = "Velocity"
 commander_letter = "V"
 
@@ -220,6 +231,7 @@ metadata/_tab_index = 9
 
 [node name="Downsample" parent="VBoxContainer/TabContainer/Monitoring" unique_id=134504222 instance=ExtResource("2_ocnpv")]
 layout_mode = 2
+tooltip_text = "Number of loops between each print of the values"
 label = "Downsample"
 commander_letter = "D"
 
@@ -270,6 +282,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Pause graph data acquisition"
 text = "Pause graph"
 alignment = 2
 
@@ -277,6 +290,7 @@ alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Disallow graph from overwriting data"
 button_pressed = true
 text = "Graph Rollover"
 alignment = 2

@@ -25,6 +25,10 @@ func process_line(data: String) -> bool:
 		$SpinBox.set_value_no_signal(value)
 	return true
 
+func _ready() -> void:
+	watch_box.visible = !silent
+	super()
+
 func _on_spin_box_value_changed(value: float) -> void:
 	var command := "%s%f" % [commander_letter, value]
 	SendValue.emit(command)

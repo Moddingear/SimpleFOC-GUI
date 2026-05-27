@@ -27,6 +27,20 @@ func gather_fields() -> Array[String]:
 			retval.push_back(commander_letter + field)
 	return retval
 
+func propagate_tooltips(root: Control):
+	if get_node(".") is not Control:
+		return
+	var sc : Control = get_node(".") as Control
+	if sc.tooltip_text != "":
+		for child in root.get_children():
+			if child is commander_field:
+				pass
+			if child is Control:
+				var cc := child as Control
+				if cc.tooltip_text == "":
+					cc.tooltip_text = sc.tooltip_text
+					propagate_tooltips(cc)
+
 func get_commander_parent() -> commander_field:
 	var parent = get_parent()
 	#get the first commander field parent by going up the hierarchy
@@ -40,6 +54,9 @@ func _enter_tree() -> void:
 		commparent.field_map[commander_letter] = self
 		WantsRefresh.connect(commparent.OnChildWantsRefresh)
 		SendValue.connect(commparent.OnChildSendValue)
+
+func _ready() -> void:
+	propagate_tooltips(get_node(".") as Control)
 
 func _exit_tree() -> void:
 	var commparent := get_commander_parent()
