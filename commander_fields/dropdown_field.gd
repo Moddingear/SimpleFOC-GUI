@@ -25,7 +25,8 @@ func process_line(data: String) -> bool:
 			$OptionButton.select(i)
 	return true
 
+func get_command() -> String:
+	return "%s%d" % [commander_letter, %OptionButton.selected]
 
 func _on_option_button_item_selected(index: int) -> void:
-	var command := "%s%d" % [commander_letter, index]
-	SendValue.emit(command)
+	SendValue.emit(get_command())

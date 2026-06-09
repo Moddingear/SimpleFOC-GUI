@@ -29,6 +29,10 @@ window/per_pixel_transparency/allowed=true
 
 enabled=PackedStringArray("res://addons/gdserial/plugin.cfg")
 
+[internationalization]
+
+locale/test="fr"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

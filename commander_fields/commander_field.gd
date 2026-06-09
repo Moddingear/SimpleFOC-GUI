@@ -26,6 +26,23 @@ func gather_fields() -> Array[String]:
 		for field in child_fields:
 			retval.push_back(commander_letter + field)
 	return retval
+	
+func get_command() -> String:
+	return ""
+
+func save_state() ->Array[String]:
+	var retval : Array[String] = []
+	var command = get_command()
+	if !silent && command.length() >0:
+		retval.append(command)
+	for key in field_map:
+		var child := field_map[key]
+		if child.silent:
+			continue
+		var child_fields = child.save_state()
+		for field in child_fields:
+			retval.push_back(commander_letter + field)
+	return retval
 
 func propagate_tooltips(root: Control):
 	if get_node(".") is not Control:

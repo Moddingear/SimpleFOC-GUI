@@ -32,6 +32,12 @@ func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 		baud_rate_entry.select(baud_select)
 
 func _ready() -> void:
+	if OS.has_feature("standalone"):
+		var locale = OS.get_locale_language()
+		print("Setting locale to %s" % locale)
+		TranslationServer.set_locale(locale)
+	else:
+		print("Running in editor. Language untouched (%s)" % TranslationServer.get_locale())
 	refresh_ports("", 115200)
 
 func process_monitor(command:String)-> bool:
@@ -42,9 +48,8 @@ func process_monitor(command:String)-> bool:
 				selected_key = key
 	if selected_key in motor_monitor_keys:
 		var this_motor = motor_monitor_keys[selected_key]
-		if !command.ends_with(this_motor.monitor_end_character):
-			return false
-		this_motor.process_monitor(command.substr(this_motor.monitor_start_character.length(), command.length() - this_motor.monitor_end_character.length() - this_motor.monitor_start_character.length()))
+		if this_motor.is_monitor_line(command):
+			this_motor.process_monitor(command.substr(this_motor.monitor_start_character.length(), command.length() - this_motor.monitor_end_character.length() - this_motor.monitor_start_character.length()))
 		return true
 	return false
 

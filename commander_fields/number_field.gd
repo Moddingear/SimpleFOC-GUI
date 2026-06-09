@@ -9,6 +9,10 @@ var last_watch_ms = 0
 		label = value
 		get_node("RichTextLabel").text = value
 
+@export var value:float:
+	get:
+		return $SpinBox.value
+
 func set_silent(new_value:bool):
 	silent = new_value
 	if watch_box:
@@ -25,13 +29,17 @@ func process_line(data: String) -> bool:
 		$SpinBox.set_value_no_signal(value)
 	return true
 
+func get_command() -> String:
+	if value == NAN:
+		return ""
+	return "%s%f" % [commander_letter, value]
+
 func _ready() -> void:
 	watch_box.visible = !silent
 	super()
 
 func _on_spin_box_value_changed(value: float) -> void:
-	var command := "%s%f" % [commander_letter, value]
-	SendValue.emit(command)
+	SendValue.emit(get_command())
 
 func _process(_delta: float) -> void:
 	if watch_box.button_pressed:

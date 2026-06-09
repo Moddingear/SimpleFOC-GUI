@@ -63,7 +63,7 @@ prefix = "Target"
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1908256901]
 layout_mode = 2
-current_tab = 1
+current_tab = 9
 
 [node name="Modes" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=616022642]
 visible = false
@@ -99,6 +99,7 @@ text = "PWM Centering"
 commander_letter = "WC"
 
 [node name="FOC Control" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1840096400]
+visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "F"
@@ -223,13 +224,30 @@ commander_letter = "A"
 metadata/_tab_index = 8
 
 [node name="Monitoring" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1232889258]
-visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "M"
 metadata/_tab_index = 9
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/Monitoring" unique_id=534413179]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/TabContainer/Monitoring/HBoxContainer" unique_id=1055688388]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Loop speed from monitor: "
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 2
+
+[node name="loop_speed" type="RichTextLabel" parent="VBoxContainer/TabContainer/Monitoring/HBoxContainer" unique_id=1217561668]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 0
+
 [node name="Downsample" parent="VBoxContainer/TabContainer/Monitoring" unique_id=134504222 instance=ExtResource("2_ocnpv")]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Number of loops between each print of the values"
 label = "Downsample"
@@ -315,8 +333,7 @@ text = "Clear graphs"
 [node name="SaveButton" type="Button" parent="Graph_buttons_container" unique_id=536644062]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Not available right now"
-disabled = true
+tooltip_text = "Copy motor settings to clipboard"
 text = "Save settings"
 
 [connection signal="pressed" from="VBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
