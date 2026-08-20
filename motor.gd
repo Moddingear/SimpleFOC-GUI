@@ -6,18 +6,19 @@ class_name motor
 @export var monitor_end_character = ""
 var monitor_split_character = "\t"
 
-@onready var monitored_fields := %"monitor variables"
-@onready var graphs : Dictionary[String, buffer_graph] = {"Current":%current_graph, "Voltage":%voltage_graph, "Radians":%radians_graph}
-@onready var graph_lines : Dictionary[String, buffer_graph] = {"Target": %radians_graph, 
-	"Voltage Q":%voltage_graph, "Voltage D":%voltage_graph, 
-	"Current Q":%current_graph, "Current D":%current_graph, 
-	"Velocity":%radians_graph, "Angle":%radians_graph}
+@onready var monitored_fields := %monitorVariables
+@onready var graphs : Dictionary[String, buffer_graph] = {"Current":%currentGraph, "Voltage":%voltageGraph, "Radians":%radiansGraph}
+@onready var graph_lines : Dictionary[String, buffer_graph] = {"Target": %radiansGraph, 
+	"Voltage Q":%voltageGraph, "Voltage D":%voltageGraph, 
+	"Current Q":%currentGraph, "Current D":%currentGraph, 
+	"A current": %currentGraph, "B current": %currentGraph, "C current": %currentGraph,
+	"Velocity":%radiansGraph, "Angle":%radiansGraph}
 var active_lines : Array[String]
 var last_monitor_tick = Time.get_ticks_usec()
 var last_monitor_tick_update = Time.get_ticks_usec()
 
-@onready var jog_slider := %jog_slider
-@onready var target_input := %target_input
+@onready var jog_slider := %jogSlider
+@onready var target_input := %targetInput
 var job_dragging = false
 var drag_value :float = 0
 
@@ -79,11 +80,11 @@ func is_monitor_line(data:String) -> bool:
 func process_monitor(data:String):
 	var now = Time.get_ticks_usec()
 	var dt = now-last_monitor_tick
-	if dt > 0 && %Downsample.value >0 && now - last_monitor_tick_update > 1e6:
-		%loop_speed.text = "%fHz" % (%Downsample.value / dt * 1e6)
+	if dt > 0 && %downsample.value >0 && now - last_monitor_tick_update > 1e6:
+		%loopSpeed.text = "%fHz" % (%downsample.value / dt * 1e6)
 		last_monitor_tick_update = now
 	last_monitor_tick = now
-	if %PauseButton.button_pressed:
+	if %pauseButton.button_pressed:
 		return
 	var split_data = data.split(monitor_split_character)
 	if split_data.size() != active_lines.size():
@@ -92,7 +93,7 @@ func process_monitor(data:String):
 		return
 	for i in range(split_data.size()):
 		var value := float(split_data[i])
-		var line_name : String = active_lines[i]
+		var line_name : String = active_lines[-i-1]
 		graph_lines[line_name].insert_point(line_name, value, 0)
 	for graph in graphs.values():
 		graph.advance()

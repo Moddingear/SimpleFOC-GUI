@@ -16,6 +16,8 @@ var num_active_cache = -1
 			add_child(new_child)
 			new_child.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			new_child.toggled.connect(_on_field_toggled)
+			if item == "":
+				new_child.visible = false
 
 func gather_fields() -> Array[String]:
 	return [commander_letter]
@@ -29,9 +31,10 @@ func update_active():
 	on_update.emit(active)
 
 func process_line(data: String) -> bool:
+	var value = data.bin_to_int()
 	for i in range(items.size()):
 		var item : CheckButton = get_child(i)
-		item.set_pressed_no_signal(data[i] == "1")
+		item.set_pressed_no_signal(value & (1<<i))
 	update_active()
 	num_active_cache = -1
 	return true
@@ -53,10 +56,10 @@ func get_command() -> String:
 	for i in range(items.size()):
 		var item : CheckButton = get_child(i)
 		if item.button_pressed:
-			value += "1"
+			value = "1" + value
 			num_active_cache +=1
 		else:
-			value += "0"
+			value = "0" + value
 	return "%s%s" % [commander_letter, value]
 	
 

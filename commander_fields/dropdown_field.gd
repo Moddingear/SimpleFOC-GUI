@@ -9,9 +9,9 @@ extends commander_field
 @export var items : Array[String]:
 	set(value):
 		items = value
-		$OptionButton.clear()
+		%optionButton.clear()
 		for item in value:
-			$OptionButton.add_item(item)
+			%optionButton.add_item(item)
 
 @export var raw_items : Array[String]
 
@@ -22,11 +22,11 @@ func process_line(data: String) -> bool:
 	for i in range(raw_items.size()):
 		var item := raw_items[i]
 		if data.to_lower() == item.to_lower():
-			$OptionButton.select(i)
+			%optionButton.select(i)
 	return true
 
 func get_command() -> String:
-	return "%s%d" % [commander_letter, %OptionButton.selected]
+	return "%s%d" % [commander_letter, %optionButton.selected]
 
 func _on_option_button_item_selected(index: int) -> void:
 	SendValue.emit(get_command())

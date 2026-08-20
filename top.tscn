@@ -2,129 +2,142 @@
 
 [ext_resource type="Script" uid="uid://cy8wsdow5s4e4" path="res://top.gd" id="1_rl3jk"]
 
-[node name="Control" type="TabContainer" unique_id=1922695316]
+[node name="Control" type="TabContainer" unique_id=1802313100]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
+current_tab = 0
+tab_0/title = "Serial port"
+tab_1/title = "New Motor"
 script = ExtResource("1_rl3jk")
 
-[node name="Serial" type="VBoxContainer" parent="." unique_id=1743622908]
-visible = false
+[node name="serial" type="VBoxContainer" parent="." unique_id=1743622908]
 layout_mode = 2
 metadata/_tab_index = 0
+metadata/_tab_name = "Serial port"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Serial" unique_id=831789347]
+[node name="serialControls" type="HBoxContainer" parent="serial" unique_id=831789347]
 layout_mode = 2
 
-[node name="Refresh" type="Button" parent="Serial/HBoxContainer" unique_id=1614833666]
+[node name="serialRefresh" type="Button" parent="serial/serialControls" unique_id=1614833666]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Refresh ports"
 
-[node name="Port" type="OptionButton" parent="Serial/HBoxContainer" unique_id=645813672]
+[node name="serialPort" type="OptionButton" parent="serial/serialControls" unique_id=645813672]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BaudRate" type="OptionButton" parent="Serial/HBoxContainer" unique_id=1490195818]
+[node name="baudRate" type="OptionButton" parent="serial/serialControls" unique_id=1490195818]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Connected" type="CheckButton" parent="Serial/HBoxContainer" unique_id=1736492719]
+[node name="serialConnected" type="CheckButton" parent="serial/serialControls" unique_id=1736492719]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Connect"
 
-[node name="Serial output" type="RichTextLabel" parent="Serial" unique_id=1730433617]
+[node name="serialOutput" type="RichTextLabel" parent="serial" unique_id=1730433617]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 scroll_following = true
 
-[node name="New Motor" type="VBoxContainer" parent="." unique_id=1297014434]
+[node name="newMotor" type="VBoxContainer" parent="." unique_id=1297014434]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+metadata/_tab_name = "New Motor"
 
-[node name="Character" type="HBoxContainer" parent="New Motor" unique_id=175303398]
+[node name="character" type="HBoxContainer" parent="newMotor" unique_id=175303398]
 layout_mode = 2
 tooltip_text = "The character to which the commander answers for this motor"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Character" unique_id=1225538126]
+[node name="RichTextLabel" type="RichTextLabel" parent="newMotor/character" unique_id=1225538126]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Character"
 fit_content = true
 autowrap_mode = 0
 
-[node name="CommanderLetter" type="LineEdit" parent="New Motor/Character" unique_id=1224659086]
+[node name="commanderLetter" type="LineEdit" parent="newMotor/character" unique_id=1224659086]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "M"
+select_all_on_focus = true
 
-[node name="MonitorBegin" type="HBoxContainer" parent="New Motor" unique_id=173757149]
+[node name="monitorBegin" type="HBoxContainer" parent="newMotor" unique_id=173757149]
 layout_mode = 2
 tooltip_text = "The begin character for the monitoring of the values of this motor
 motor.monitor_start_char"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorBegin" unique_id=991963170]
+[node name="RichTextLabel" type="RichTextLabel" parent="newMotor/monitorBegin" unique_id=991963170]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor start character"
 fit_content = true
 autowrap_mode = 0
 
-[node name="StartChar" type="LineEdit" parent="New Motor/MonitorBegin" unique_id=791198119]
+[node name="startChar" type="LineEdit" parent="newMotor/monitorBegin" unique_id=791198119]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+select_all_on_focus = true
 
-[node name="MonitorEnd" type="HBoxContainer" parent="New Motor" unique_id=338582353]
+[node name="monitorEnd" type="HBoxContainer" parent="newMotor" unique_id=338582353]
 layout_mode = 2
 tooltip_text = "The end character for the monitoring of the values of this motor
 motor.monitor_end_char"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorEnd" unique_id=1573637856]
+[node name="RichTextLabel" type="RichTextLabel" parent="newMotor/monitorEnd" unique_id=1573637856]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor end character"
 fit_content = true
 autowrap_mode = 0
 
-[node name="EndChar" type="LineEdit" parent="New Motor/MonitorEnd" unique_id=1140864772]
+[node name="endChar" type="LineEdit" parent="newMotor/monitorEnd" unique_id=1140864772]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+select_all_on_focus = true
 
-[node name="MonitorSeparator" type="HBoxContainer" parent="New Motor" unique_id=1563301194]
+[node name="monitorSeparator" type="HBoxContainer" parent="newMotor" unique_id=1563301194]
 layout_mode = 2
 tooltip_text = "The separator of the values of the monitoring
 motor.monitor_separator"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/MonitorSeparator" unique_id=1779430622]
+[node name="RichTextLabel" type="RichTextLabel" parent="newMotor/monitorSeparator" unique_id=1779430622]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor separator"
 fit_content = true
 autowrap_mode = 0
 
-[node name="SeparatorChar" type="LineEdit" parent="New Motor/MonitorSeparator" unique_id=1301421704]
+[node name="separatorChar" type="LineEdit" parent="newMotor/monitorSeparator" unique_id=1301421704]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "\\t"
+select_all_on_focus = true
 
-[node name="Verbosity" type="HBoxContainer" parent="New Motor" unique_id=997425969]
+[node name="verbosity" type="HBoxContainer" parent="newMotor" unique_id=997425969]
 layout_mode = 2
 tooltip_text = "The separator of the values of the monitoring
 motor.monitor_separator"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/Verbosity" unique_id=25166828]
+[node name="RichTextLabel" type="RichTextLabel" parent="newMotor/verbosity" unique_id=25166828]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Verbosity"
 fit_content = true
 autowrap_mode = 0
 
-[node name="VerbosityOption" type="OptionButton" parent="New Motor/Verbosity" unique_id=306708894]
+[node name="verbosityOption" type="OptionButton" parent="newMotor/verbosity" unique_id=306708894]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -142,30 +155,31 @@ popup/item_2/disabled = true
 popup/item_3/text = "Machine readable"
 popup/item_3/id = 3
 
-[node name="DecimalPlaces" type="HBoxContainer" parent="New Motor" unique_id=808314434]
+[node name="decimalPlaces" type="HBoxContainer" parent="newMotor" unique_id=808314434]
 layout_mode = 2
 tooltip_text = "The separator of the values of the monitoring
 motor.monitor_separator"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="New Motor/DecimalPlaces" unique_id=165383986]
+[node name="RichTextLabel" type="RichTextLabel" parent="newMotor/decimalPlaces" unique_id=165383986]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Number of decimal places"
 fit_content = true
 autowrap_mode = 0
 
-[node name="DecimalBox" type="SpinBox" parent="New Motor/DecimalPlaces" unique_id=84354066]
+[node name="decimalBox" type="SpinBox" parent="newMotor/decimalPlaces" unique_id=84354066]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 10.0
 value = 8.0
 rounded = true
+select_all_on_focus = true
 
-[node name="Create" type="Button" parent="New Motor" unique_id=1208867739]
+[node name="Create" type="Button" parent="newMotor" unique_id=1208867739]
 layout_mode = 2
 text = "Create"
 
-[connection signal="pressed" from="Serial/HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
-[connection signal="toggled" from="Serial/HBoxContainer/Connected" to="." method="_on_connected_toggled"]
-[connection signal="pressed" from="New Motor/Create" to="." method="_on_create_pressed"]
+[connection signal="pressed" from="serial/serialControls/serialRefresh" to="." method="_on_refresh_pressed"]
+[connection signal="toggled" from="serial/serialControls/serialConnected" to="." method="_on_connected_toggled"]
+[connection signal="pressed" from="newMotor/Create" to="." method="_on_create_pressed"]

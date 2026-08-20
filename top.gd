@@ -1,14 +1,16 @@
 extends commander_field
 
 var serial_port = GdSerial.new()
-@onready var serial_port_entry := $Serial/HBoxContainer/Port
-@onready var baud_rate_entry := $Serial/HBoxContainer/BaudRate
-@onready var serial_connected_entry := $Serial/HBoxContainer/Connected
-@onready var serial_refresh_button := $Serial/HBoxContainer/Refresh
-@onready var serial_monitor := $"Serial/Serial output"
+@onready var serial_port_entry := %serialPort
+@onready var baud_rate_entry := %baudRate
+@onready var serial_connected_entry := %serialConnected
+@onready var serial_refresh_button := %serialRefresh
+@onready var serial_monitor := %serialOutput
 
 var motor_scene = preload("res://motor.tscn")
 var motor_monitor_keys :Dictionary[String, motor] = {}
+
+var serial_reconnect = false
 
 func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 	var ports := serial_port.list_ports()
@@ -17,7 +19,7 @@ func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 	for port in ports:
 		var port_data = ports[port]
 		if port_data["port_type"] != "Unknown":
-			serial_port_entry.add_item(port_data["port_name"])
+			serial_port_entry.add_item("%s: %s" % [port_data["port_name"], port_data["device_name"]])
 			if port_data["port_name"] == preselect_port:
 				port_select = serial_port_entry.item_count-1
 	if serial_port_entry.item_count > 0:
@@ -31,13 +33,13 @@ func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 				baud_select = baud_rate_entry.item_count -1
 		baud_rate_entry.select(baud_select)
 
+func get_selected_port_path() -> String:
+	var selected_index = serial_port_entry.selected
+	if selected_index == -1:
+		return ""
+	return serial_port_entry.get_item_text(selected_index).split(":")[0]
+
 func _ready() -> void:
-	if OS.has_feature("standalone"):
-		var locale = OS.get_locale_language()
-		print("Setting locale to %s" % locale)
-		TranslationServer.set_locale(locale)
-	else:
-		print("Running in editor. Language untouched (%s)" % TranslationServer.get_locale())
 	refresh_ports("", 115200)
 
 func process_monitor(command:String)-> bool:
@@ -55,7 +57,20 @@ func process_monitor(command:String)-> bool:
 
 func _process(delta: float) -> void:
 	var serial_connected : bool = serial_port.is_open()
-	serial_connected_entry.set_pressed_no_signal(serial_connected)
+	# serial_connected_entry.set_pressed_no_signal(serial_connected)
+	if !serial_connected && serial_reconnect:
+		var selected_port = get_selected_port_path()
+		var ports := serial_port.list_ports()
+		for port in ports:
+			var port_data = ports[port]
+			if port_data["port_name"] == selected_port:
+				serial_port.open()
+				serial_port.clear_buffer()
+				break
+		serial_connected_entry.add_theme_color_override("button_checked_color", Color.RED)
+	else:
+		serial_connected_entry.remove_theme_color_override("button_checked_color")
+		serial_connected_entry.set_pressed_no_signal(serial_connected)
 	serial_refresh_button.disabled = serial_connected
 	serial_port_entry.disabled = serial_connected
 	baud_rate_entry.disabled = serial_connected
@@ -88,13 +103,17 @@ func _on_connected_toggled(toggled_on: bool) -> void:
 			return
 		if serial_port.is_open():
 			serial_port.close()
-		serial_port.set_port(serial_port_entry.get_item_text(serial_port_entry.selected))
+		serial_port.set_port(get_selected_port_path())
 		serial_port.set_baud_rate(int(baud_rate_entry.get_item_text(baud_rate_entry.selected)))
 		serial_port.clear_buffer()
 		if !serial_port.open():
 			serial_port.close()
+		else:
+			# attempt reconnection if serial is lost
+			serial_reconnect = true
 	else:
 		serial_port.close()
+		serial_reconnect = false
 
 func OnChildWantsRefresh(fields:Array[String]) -> void:
 	if !serial_port.is_open():
@@ -116,11 +135,11 @@ func _on_refresh_pressed() -> void:
 
 func _on_create_pressed() -> void:
 	var nmotor := motor_scene.instantiate()
-	nmotor.monitor_start_character = %StartChar.text.c_unescape()
-	nmotor.monitor_end_character = %EndChar.text.c_unescape()
-	nmotor.monitor_split_character = %SeparatorChar.text.c_unescape()
-	nmotor.commander_letter = %CommanderLetter.text.c_unescape()
-	OnChildSendValue("#%d" % int(%DecimalBox.value))
+	nmotor.monitor_start_character = %startChar.text.c_unescape()
+	nmotor.monitor_end_character = %endChar.text.c_unescape()
+	nmotor.monitor_split_character = %separatorChar.text.c_unescape()
+	nmotor.commander_letter = %commanderLetter.text.c_unescape()
+	OnChildSendValue("#%d" % int(%decimalBox.value))
 	nmotor.name = "Motor " + nmotor.commander_letter
 	motor_monitor_keys[nmotor.monitor_start_character] = nmotor
 	add_child(nmotor)

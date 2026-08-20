@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c6gugwl81jow6" path="res://commander_fields/boolean_field.gd" id="1_sphgx"]
 
-[node name="BooleanField" type="CheckButton" unique_id=1442210639]
+[node name="booleanField" type="CheckButton" unique_id=1442210639]
 alignment = 2
 expand_icon = true
 script = ExtResource("1_sphgx")

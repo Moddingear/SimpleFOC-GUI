@@ -11,7 +11,7 @@ var last_watch_ms = 0
 
 @export var value:float:
 	get:
-		return $SpinBox.value
+		return %spinBox.value
 
 func set_silent(new_value:bool):
 	silent = new_value
@@ -24,9 +24,9 @@ func gather_fields() -> Array[String]:
 func process_line(data: String) -> bool:
 	var value := float(data)
 	if value == -12345:
-		$SpinBox.set_value_no_signal(NAN)
+		%spinBox.set_value_no_signal(NAN)
 	else:
-		$SpinBox.set_value_no_signal(value)
+		%spinBox.set_value_no_signal(value)
 	return true
 
 func get_command() -> String:
