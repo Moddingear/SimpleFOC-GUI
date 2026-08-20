@@ -22,11 +22,11 @@ func gather_fields() -> Array[String]:
 	return [commander_letter]
 
 func process_line(data: String) -> bool:
-	var value := float(data)
-	if value == -12345:
+	var new_value := float(data)
+	if new_value == -12345:
 		%spinBox.set_value_no_signal(NAN)
 	else:
-		%spinBox.set_value_no_signal(value)
+		%spinBox.set_value_no_signal(new_value)
 	return true
 
 func get_command() -> String:
@@ -38,7 +38,7 @@ func _ready() -> void:
 	watch_box.visible = !silent
 	super()
 
-func _on_spin_box_value_changed(value: float) -> void:
+func _on_spin_box_value_changed(_new_value: float) -> void:
 	SendValue.emit(get_command())
 
 func _process(_delta: float) -> void:

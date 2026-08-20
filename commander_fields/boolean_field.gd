@@ -11,5 +11,5 @@ func process_line(data: String) -> bool:
 func get_command() -> String:
 	return "%s%d" % [commander_letter, int(($"." as Button).button_pressed)]
 
-func _on_toggled(toggled_on: bool) -> void:
+func _on_toggled(_toggled_on: bool) -> void:
 	SendValue.emit(get_command())

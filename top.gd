@@ -7,6 +7,8 @@ var serial_port = GdSerial.new()
 @onready var serial_refresh_button := %serialRefresh
 @onready var serial_monitor := %serialOutput
 
+var new_motor_save_path = "user://new_motor.json"
+
 var motor_scene = preload("res://motor.tscn")
 var motor_monitor_keys :Dictionary[String, motor] = {}
 
@@ -41,6 +43,15 @@ func get_selected_port_path() -> String:
 
 func _ready() -> void:
 	refresh_ports("", 115200)
+	if FileAccess.file_exists(new_motor_save_path):
+		var file = FileAccess.open(new_motor_save_path, FileAccess.READ)
+		var parsed: Dictionary = JSON.parse_string(file.get_as_text())
+		if parsed is Dictionary:
+			%startChar.text = (parsed.get("startCharacter", %startChar.text.c_unescape()) as String).c_escape()
+			%endChar.text = (parsed.get("endCharacter", %endChar.text.c_unescape()) as String).c_escape()
+			%separatorChar.text = (parsed.get("splitCharacter", %separatorChar.text.c_unescape()) as String).c_escape()
+			%commanderLetter.text = (parsed.get("commanderLetter", %commanderLetter.text.c_unescape()) as String).c_escape()
+			%decimalBox.value = (parsed.get("decimals", int(%decimalBox.value)) as int)
 
 func process_monitor(command:String)-> bool:
 	var selected_key :String = ""
@@ -55,7 +66,7 @@ func process_monitor(command:String)-> bool:
 		return true
 	return false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var serial_connected : bool = serial_port.is_open()
 	# serial_connected_entry.set_pressed_no_signal(serial_connected)
 	if !serial_connected && serial_reconnect:
@@ -134,12 +145,21 @@ func _on_refresh_pressed() -> void:
 
 
 func _on_create_pressed() -> void:
-	var nmotor := motor_scene.instantiate()
+	var nmotor : motor= motor_scene.instantiate()
 	nmotor.monitor_start_character = %startChar.text.c_unescape()
 	nmotor.monitor_end_character = %endChar.text.c_unescape()
 	nmotor.monitor_split_character = %separatorChar.text.c_unescape()
 	nmotor.commander_letter = %commanderLetter.text.c_unescape()
-	OnChildSendValue("#%d" % int(%decimalBox.value))
+	var num_decimals = int(%decimalBox.value)
+	var creation_dict = {
+		"startCharacter": nmotor.monitor_start_character,
+		"endCharacter": nmotor.monitor_end_character,
+		"splitCharacter": nmotor.monitor_split_character,
+		"commanderLetter": nmotor.commander_letter,
+		"decimals": num_decimals,
+	}
+	FileAccess.open(new_motor_save_path, FileAccess.WRITE).store_line(JSON.stringify(creation_dict))
+	OnChildSendValue("#%d" % num_decimals)
 	nmotor.name = "Motor " + nmotor.commander_letter
 	motor_monitor_keys[nmotor.monitor_start_character] = nmotor
 	add_child(nmotor)

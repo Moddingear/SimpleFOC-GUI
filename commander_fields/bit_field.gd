@@ -63,5 +63,5 @@ func get_command() -> String:
 	return "%s%s" % [commander_letter, value]
 	
 
-func _on_field_toggled(toggled_on: bool) -> void:
+func _on_field_toggled(_toggled_on: bool) -> void:
 	SendValue.emit(get_command())

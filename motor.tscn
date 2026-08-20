@@ -64,10 +64,9 @@ select_all_on_focus = true
 
 [node name="settings_tabs" type="TabContainer" parent="parameters" unique_id=1908256901]
 layout_mode = 2
-current_tab = 9
+current_tab = 0
 
 [node name="Modes" type="VBoxContainer" parent="parameters/settings_tabs" unique_id=616022642]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -225,6 +224,7 @@ commander_letter = "A"
 metadata/_tab_index = 8
 
 [node name="Monitoring" type="VBoxContainer" parent="parameters/settings_tabs" unique_id=1232889258]
+visible = false
 layout_mode = 2
 script = ExtResource("1_xbv7l")
 commander_letter = "M"

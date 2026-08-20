@@ -198,7 +198,7 @@ func _draw() -> void:
 			var string := str(value) + "  "
 			var string_size := font.get_string_size(string)
 			max_string_width = max(string_size.x, max_string_width)
-			draw_string(font, graph_rect.position+Vector2(accumulated_text_width, graph_rect.size.y+string_size.y), string, 0, -1, 16, color)
+			draw_string(font, graph_rect.position+Vector2(accumulated_text_width, graph_rect.size.y+string_size.y), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 			accumulated_text_width+= max_string_width
 	
 func _process(_delta: float) -> void:

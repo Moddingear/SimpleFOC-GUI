@@ -66,8 +66,8 @@ func get_commander_parent() -> commander_field:
 	return parent as commander_field
 
 func _enter_tree() -> void:
-	var commparent := get_commander_parent()
-	if commparent is commander_field:
+	var commparent : commander_field = get_commander_parent()
+	if commparent:
 		commparent.field_map[commander_letter] = self
 		WantsRefresh.connect(commparent.OnChildWantsRefresh)
 		SendValue.connect(commparent.OnChildSendValue)

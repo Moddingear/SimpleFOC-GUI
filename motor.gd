@@ -116,7 +116,7 @@ func _on_monitored_fields_update(active_fields: Array[String]) -> void:
 	active_lines = active_fields
 
 
-func _on_h_slider_drag_ended(value_changed: bool) -> void:
+func _on_h_slider_drag_ended(_value_changed: bool) -> void:
 	job_dragging = false
 
 
@@ -125,7 +125,7 @@ func _on_h_slider_drag_started() -> void:
 
 func _on_points_box_value_changed(value: float) -> void:
 	for key in graphs:
-		graphs[key].loop_size = value
+		graphs[key].loop_size = int(value)
 
 
 func _on_clear_button_pressed() -> void:
