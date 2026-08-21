@@ -40,11 +40,36 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Connect"
 
-[node name="serialOutput" type="RichTextLabel" parent="serial" unique_id=1730433617]
+[node name="serialOutput" type="ScrollContainer" parent="serial" unique_id=268895669]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-scroll_following = true
+vertical_scroll_mode = 2
+
+[node name="serialChildHolder" type="VBoxContainer" parent="serial/serialOutput" unique_id=1909155141]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="serial" unique_id=1132807824]
+layout_mode = 2
+
+[node name="showSimpleFOC" type="CheckBox" parent="serial/HBoxContainer" unique_id=512342509]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+button_pressed = true
+text = "Show SimpleFOC commands"
+
+[node name="showMonitor" type="CheckBox" parent="serial/HBoxContainer" unique_id=675371045]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+button_pressed = true
+text = "Show Monitor"
 
 [node name="newMotor" type="VBoxContainer" parent="." unique_id=1297014434]
 visible = false

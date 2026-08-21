@@ -10,8 +10,9 @@ class_name buffer_graph
 @export var rollover:bool = true
 var point_storage : Dictionary[String, PackedVector2Array]
 var validity_start : Dictionary[String, int]
-var write_index :int
+var write_index :int = 0
 var max_string_width :float= 0
+var vertical_axis := graphAxis.new()
 
 func comparator(a : Vector2, b : Vector2):
 	return a.x < b.x
@@ -76,37 +77,28 @@ func get_minmax()->Vector2:
 	var miny : float = INF
 	for key in point_storage:
 		var storage := point_storage[key]
-		for point in storage:
+		var valid_range: Array
+		var vstart = validity_start[key]
+		if vstart == -1:
+			valid_range = range(storage.size())
+		elif write_index > vstart:
+			valid_range = range(validity_start[key], write_index)
+		else:
+			valid_range = range(validity_start[key], loop_size) + range(0, write_index)
+		for i in valid_range:
+			var point = storage[i]
 			maxy = maxf(maxy, point.y)
 			miny = minf(miny, point.y)
 	if maxy == miny:
 		return Vector2(miny - 0.5, maxy + 0.5)
 	return Vector2(miny, maxy)
 
-func get_minmax_unit(graph_rect:Rect2, minmax:Vector2)->float:
-	#var minlog = floorf(log(abs(minmax.x))/log(10))
-	#var maxlog = floorf(log(abs(minmax.y))/log(10))
-	var delta = minmax.y-minmax.x
-	var deltalog = floorf(log(abs(delta))/log(10))
-	var baselog = deltalog#maxf(minlog, maxlog)
-	var maxgraduations = absf(floor(graph_rect.size.y/ThemeDB.fallback_font.get_height()))/2
-	var unit = pow(10, baselog-1)
-	while delta/unit > maxgraduations:
-		if delta/unit/10 > maxgraduations:
-			unit *= 10
-		else:
-			unit *= 2
-	return unit
-
-func minmax_unit_snap(minmax:Vector2, unit:float)->Vector2:
-	var min_snapped = snappedf(minmax.x, unit)
-	if min_snapped > minmax.x: min_snapped-=unit
-	var max_snapped = snappedf(minmax.y, unit)
-	if max_snapped < minmax.y: max_snapped+=unit
-	return Vector2(min_snapped, max_snapped)
-
 func get_color(index : int)->Color:
 	return Color.from_hsv(float(index)/point_storage.size(), 1, 1)
+
+func draw_polyline_safe(points:PackedVector2Array, color: Color):
+	if points.size() >= 2:
+		draw_polyline(points, color)
 
 func draw_lines(graph_rect:Rect2, miny:float, maxy:float) -> void:
 	var scaley = graph_rect.size.y/(maxy-miny)
@@ -122,28 +114,16 @@ func draw_lines(graph_rect:Rect2, miny:float, maxy:float) -> void:
 		else:
 			if write_index < valid_from:
 				#2 segments
-				draw_polyline(point_storage[key].slice(valid_from), color)
-				draw_polyline(point_storage[key].slice(0, write_index), color)
+				draw_polyline_safe(point_storage[key].slice(valid_from), color)
+				draw_polyline_safe(point_storage[key].slice(0, write_index), color)
 			else:
-				draw_polyline(point_storage[key].slice(valid_from, write_index), color)
+				draw_polyline_safe(point_storage[key].slice(valid_from, write_index), color)
 		drawidx += 1
 	draw_set_transform(Vector2.ZERO)
 
 func draw_vaxis(graph_rect:Rect2, unit:float, minmax:Vector2) ->void:
-	var delta = minmax.y - minmax.x
-	var num_units : int = roundi(delta/unit)
 	var bottom_right : Vector2 = graph_rect.position + Vector2.DOWN*graph_rect.size.y
-	if num_units > 1000:
-		return
-	for i in range(num_units):
-		var alpha : float = float(i) / num_units
-		var pos :Vector2 = bottom_right + Vector2.UP * graph_rect.size.y * alpha
-		var value : float = snappedf(lerpf(minmax.x, minmax.y, alpha), unit)
-		var text : String = str(value)
-		var width = graph_rect.size.x/400 * (2 if snappedf(value, unit*10) == value else 1)
-		draw_line(pos + Vector2.LEFT * width, pos+Vector2.RIGHT * width, Color.WHITE)
-		draw_string(ThemeDB.fallback_font, pos + Vector2.RIGHT * width, text, HORIZONTAL_ALIGNMENT_RIGHT)
-	draw_line(bottom_right, bottom_right+Vector2.UP*graph_rect.size.y, Color.WHITE)
+	vertical_axis.draw_axis(bottom_right, graph_rect.position, unit, graph_rect.size.x/400, minmax, self)
 
 func draw_legends(graph_rect:Rect2)->void:
 	var drawidx:int = 0
@@ -170,12 +150,47 @@ func is_mouse_inside()->bool:
 		return false
 	return get_graph_rect().abs().has_point(get_mouse_local_position())
 
+func is_valid_index(index:int, validity_start:int)-> bool:
+	if validity_start == -1:
+		return true
+	if validity_start < write_index:
+		return validity_start <= index and index < write_index
+	else:
+		return index < write_index or validity_start <= index
+
+func draw_line_to_mouse(graph_rect:Rect2, minmax_snapped:Vector2):
+	var mouse_pos:= get_mouse_local_position()
+	var line_positions = []
+	if not graph_rect.has_point(mouse_pos):
+		return
+	var t = (mouse_pos.x-graph_rect.position.x)/graph_rect.size.x
+	var i = int(t*loop_size)
+	var keys := point_storage.keys()
+	var accumulated_text_width = 0
+	for index:int in keys.size():
+		var key = keys[index]
+		var vstart = validity_start[key]
+		if not is_valid_index(i, vstart):
+			continue
+		var value = point_storage[key][i].y
+		var y = remap(value, minmax_snapped.y, minmax_snapped.x, graph_rect.position.y, graph_rect.position.y+graph_rect.size.y)
+		var color := get_color(index)
+		line_positions.push_back([y, value, color])
+	line_positions.sort_custom(func(a,b): return absf(a[0]-mouse_pos.y) > absf(b[0]-mouse_pos.y))
+	for position in line_positions:
+		draw_line(mouse_pos, Vector2(mouse_pos.x, position[0]), position[2])
+		var string := str(position[1]) + "  "
+		var string_size := font.get_string_size(string)
+		max_string_width = max(string_size.x, max_string_width)
+		draw_string(font, graph_rect.position+Vector2(accumulated_text_width, graph_rect.size.y+string_size.y), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, position[2])
+		accumulated_text_width+= max_string_width
+
 func _draw() -> void:
 	#var drawidx : int = 0
 	var graph_rect = get_graph_rect()
 	var minmax = get_minmax()
-	var unit = get_minmax_unit(graph_rect, minmax)
-	var minmax_snapped = minmax_unit_snap(minmax, unit)
+	var unit = vertical_axis.get_minmax_unit(graph_rect, minmax)
+	var minmax_snapped = vertical_axis.minmax_unit_snap(minmax, unit)
 	if point_storage.size() == 0:
 		return
 	draw_lines(graph_rect, minmax_snapped.x, minmax_snapped.y)
@@ -183,23 +198,7 @@ func _draw() -> void:
 	draw_legends(graph_rect)
 	var line_offset = Vector2(graph_rect.size.x*write_index/loop_size, 0)
 	draw_line(graph_rect.position +line_offset, graph_rect.position+line_offset+Vector2(0, graph_rect.size.y), Color.WHITE)
-	var mouse_pos:= get_mouse_local_position()
-	if graph_rect.has_point(mouse_pos):
-		var t = (mouse_pos.x-graph_rect.position.x)/graph_rect.size.x
-		var i = int(t*loop_size)
-		var keys := point_storage.keys()
-		var accumulated_text_width = 0
-		for index:int in keys.size():
-			var key = keys[index]
-			var value = point_storage[key][i].y
-			var y = remap(value, minmax_snapped.y, minmax_snapped.x, graph_rect.position.y, graph_rect.position.y+graph_rect.size.y)
-			var color := get_color(index)
-			draw_line(mouse_pos, Vector2(mouse_pos.x, y), color)
-			var string := str(value) + "  "
-			var string_size := font.get_string_size(string)
-			max_string_width = max(string_size.x, max_string_width)
-			draw_string(font, graph_rect.position+Vector2(accumulated_text_width, graph_rect.size.y+string_size.y), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
-			accumulated_text_width+= max_string_width
+	draw_line_to_mouse(graph_rect, minmax_snapped)
 	
 func _process(_delta: float) -> void:
 	if is_mouse_inside():
