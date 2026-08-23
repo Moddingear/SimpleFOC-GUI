@@ -14,8 +14,9 @@ var monitor_split_character = "\t"
 	"A current": %currentGraph, "B current": %currentGraph, "C current": %currentGraph,
 	"Velocity":%radiansGraph, "Angle":%radiansGraph}
 var active_lines : Array[String]
-var last_monitor_tick = Time.get_ticks_usec()
-var last_monitor_tick_update = Time.get_ticks_usec()
+var last_monitor_tick :int = Time.get_ticks_usec()
+var last_monitor_tick_update :int = Time.get_ticks_usec()
+var num_monitor_between_updates :int = 1
 
 @onready var jog_slider := %jogSlider
 @onready var target_input := %targetInput
@@ -79,10 +80,13 @@ func is_monitor_line(data:String) -> bool:
 #data : no start/end character
 func process_monitor(data:String):
 	var now = Time.get_ticks_usec()
-	var dt = now-last_monitor_tick
-	if dt > 0 && %downsample.value >0 && now - last_monitor_tick_update > 1e6:
-		%loopSpeed.text = "%fHz" % (%downsample.value / dt * 1e6)
+	var dt = now-last_monitor_tick_update
+	if %downsample.value > 0 && now - last_monitor_tick_update > 1e6:
+		%loopSpeed.text = "%fHz" % (%downsample.value * num_monitor_between_updates / dt * 1e6)
 		last_monitor_tick_update = now
+		num_monitor_between_updates = 1
+	else:
+		num_monitor_between_updates +=1
 	last_monitor_tick = now
 	if %pauseButton.button_pressed:
 		return

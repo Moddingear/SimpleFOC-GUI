@@ -80,11 +80,11 @@ func get_minmax()->Vector2:
 		var valid_range: Array
 		var vstart = validity_start[key]
 		if vstart == -1:
-			valid_range = range(storage.size())
+			valid_range = range(loop_size)
 		elif write_index > vstart:
-			valid_range = range(validity_start[key], write_index)
+			valid_range = range(vstart, write_index)
 		else:
-			valid_range = range(validity_start[key], loop_size) + range(0, write_index)
+			valid_range = range(vstart, loop_size) + range(0, write_index)
 		for i in valid_range:
 			var point = storage[i]
 			maxy = maxf(maxy, point.y)
