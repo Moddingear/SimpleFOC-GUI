@@ -17,6 +17,7 @@ var active_lines : Array[String]
 var last_monitor_tick :int = Time.get_ticks_usec()
 var last_monitor_tick_update :int = Time.get_ticks_usec()
 var num_monitor_between_updates :int = 1
+var monitor_sample_index :int = 0
 
 @onready var jog_slider := %jogSlider
 @onready var target_input := %targetInput
@@ -95,12 +96,15 @@ func process_monitor(data:String):
 		if active_lines.size() != monitored_fields.get_num_active():
 			printerr("Active line mismatch with selected fields!")
 		return
+	var monitor_data = {"sample_index": monitor_sample_index}
 	for i in range(split_data.size()):
 		var value := float(split_data[i])
-		var line_name : String = active_lines[-i-1]
+		var line_name : String = active_lines[i]
 		graph_lines[line_name].insert_point(line_name, value, 0)
+		monitor_data[line_name] = value
 	for graph in graphs.values():
 		graph.advance()
+	monitor_sample_index += 1
 
 func _on_spin_box_value_changed(value: float) -> void:
 	drag_value = value
@@ -118,6 +122,7 @@ func _on_monitored_fields_update(active_fields: Array[String]) -> void:
 			if field not in current_keys && graph_lines[field] == graph:
 				graph.show_line(field)
 	active_lines = active_fields
+	active_lines.reverse()
 
 
 func _on_h_slider_drag_ended(_value_changed: bool) -> void:

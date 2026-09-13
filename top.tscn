@@ -71,6 +71,14 @@ size_flags_vertical = 8
 button_pressed = true
 text = "Show Monitor"
 
+[node name="LineEdit" type="LineEdit" parent="serial/HBoxContainer" unique_id=479534518]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+placeholder_text = "Send to serial"
+clear_button_enabled = true
+select_all_on_focus = true
+
 [node name="newMotor" type="VBoxContainer" parent="." unique_id=1297014434]
 visible = false
 layout_mode = 2
@@ -206,5 +214,7 @@ layout_mode = 2
 text = "Create"
 
 [connection signal="pressed" from="serial/serialControls/serialRefresh" to="." method="_on_refresh_pressed"]
+[connection signal="item_selected" from="serial/serialControls/serialPort" to="." method="_on_serial_port_item_selected"]
 [connection signal="toggled" from="serial/serialControls/serialConnected" to="." method="_on_connected_toggled"]
+[connection signal="text_submitted" from="serial/HBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="pressed" from="newMotor/Create" to="." method="_on_create_pressed"]

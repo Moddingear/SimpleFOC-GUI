@@ -178,7 +178,7 @@ func draw_line_to_mouse(graph_rect:Rect2, minmax_snapped:Vector2):
 		line_positions.push_back([y, value, color])
 	line_positions.sort_custom(func(a,b): return absf(a[0]-mouse_pos.y) > absf(b[0]-mouse_pos.y))
 	for position in line_positions:
-		draw_line(mouse_pos, Vector2(mouse_pos.x, position[0]), position[2])
+		draw_dashed_line(mouse_pos, Vector2(mouse_pos.x, position[0]), position[2], -1, 2, false)
 		var string := str(position[1]) + "  "
 		var string_size := font.get_string_size(string)
 		max_string_width = max(string_size.x, max_string_width)

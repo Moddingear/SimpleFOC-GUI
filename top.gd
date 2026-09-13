@@ -1,6 +1,7 @@
 extends commander_field
 
-var serial_port = GdSerial.new()
+var serial_manager = GdSerialManager.new()
+var serial_port_name: String = ""
 @onready var serial_port_entry := %serialPort
 @onready var baud_rate_entry := %baudRate
 @onready var serial_connected_entry := %serialConnected
@@ -23,7 +24,7 @@ var serial_reconnect = false
 var scroll_down_next_frame :bool = false
 
 func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
-	var ports := serial_port.list_ports()
+	var ports := serial_manager.list_ports()
 	serial_port_entry.clear()
 	var port_select : int = 0
 	for port in ports:
@@ -42,6 +43,7 @@ func refresh_ports(preselect_port : String, preselect_baud : int) -> void:
 			if baud_rate == preselect_baud:
 				baud_select = baud_rate_entry.item_count -1
 		baud_rate_entry.select(baud_select)
+	serial_port_name = get_selected_port_path()
 
 func get_selected_port_path() -> String:
 	var selected_index = serial_port_entry.selected
@@ -69,7 +71,9 @@ func _ready() -> void:
 		last_rx_line.text = " "
 		serial_monitor_container.add_child(last_rx_line)
 	last_rx_line = null
-	serial_monitor_scroller.set_deferred("scroll_vertical", ThemeDB.fallback_font.get_height() * num_serial_lines)
+	serial_monitor_scroller.set_deferred("scroll_vertical", ThemeDB.fallback_font.get_height() * (num_serial_lines+1))
+	serial_manager.connect("data_received", data_received)
+	serial_manager.connect("port_disconnected", port_disconnected)
 
 func process_monitor(command:String)-> bool:
 	var selected_key :String = ""
@@ -88,14 +92,13 @@ func add_serial_line(text):
 	last_rx_line = serial_monitor_container.get_child(0)
 	serial_monitor_container.move_child(last_rx_line, num_serial_lines)
 	last_rx_line.text = text
+	last_rx_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	last_rx_line.remove_theme_color_override("default_color")
-
-func process_serial():
-	var nbbytes = serial_port.bytes_available()
-	if nbbytes <= 0:
-		return
-	var received_raw := serial_port.read(nbbytes)
-	var received := received_raw.get_string_from_ascii()
+	
+func data_received(port:String, data:PackedByteArray):
+	if port != serial_port_name:
+		printerr("Receiving data from unexpected port ! %s sent \"%s\"" % [port, data.get_string_from_ascii()])
+	var received := data.get_string_from_ascii()
 	#print("Received \"%s\"" % received)
 	var scan_start :int = rx_line_buffer.length() 
 	rx_line_buffer += received
@@ -131,20 +134,21 @@ func process_serial():
 			last_rx_line = null
 	if last_newline != rx_line_buffer.length() -1:
 		add_serial_line(rx_line_buffer.substr(last_newline).rstrip("\r\n").lstrip("\r\n"))
+		
+func port_disconnected(port:String):
+	add_serial_line(" --- Serial disconnected --- ")
+	last_rx_line.add_theme_color_override("default_color", Color.RED)
+
+func process_serial():
+	serial_manager.poll_events()
+	
 
 func _process(_delta: float) -> void:
-	var serial_connected : bool = serial_port.is_open()
+	var serial_connected : bool = serial_manager.is_open(serial_port_name)
 	# serial_connected_entry.set_pressed_no_signal(serial_connected)
 	if !serial_connected && serial_reconnect:
-		var selected_port = get_selected_port_path()
-		var ports := serial_port.list_ports()
-		for port in ports:
-			var port_data = ports[port]
-			if port_data["port_name"] == selected_port:
-				serial_port.open()
-				serial_port.clear_buffer()
-				break
-		serial_connected_entry.add_theme_color_override("button_checked_color", Color.RED)
+		if !connect_if_available():
+			serial_connected_entry.add_theme_color_override("button_checked_color", Color.RED)
 	else:
 		serial_connected_entry.remove_theme_color_override("button_checked_color")
 		serial_connected_entry.set_pressed_no_signal(serial_connected)
@@ -158,43 +162,49 @@ func _process(_delta: float) -> void:
 		($"." as TabContainer).current_tab = 0
 
 func _exit_tree() -> void:
-	serial_port.close()
+	serial_manager.close(serial_port_name)
+	
+func connect_if_available() -> bool:
+	var selected_port = serial_port_name
+	var ports := serial_manager.list_ports()
+	for port in ports:
+		var port_data = ports[port]
+		if port_data["port_name"] == selected_port:
+			if serial_manager.open(serial_port_name, int(baud_rate_entry.get_item_text(baud_rate_entry.selected)), 100, 0):
+				add_serial_line(" --- Serial connected --- ")
+				last_rx_line.add_theme_color_override("default_color", Color.GREEN)
+				return true
+			else:
+				return false
+	return false
 
 func _on_connected_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		if serial_port_entry.selected == -1 || baud_rate_entry.selected == -1:
 			return
-		if serial_port.is_open():
-			serial_port.close()
-		serial_port.set_port(get_selected_port_path())
-		serial_port.set_baud_rate(int(baud_rate_entry.get_item_text(baud_rate_entry.selected)))
-		serial_port.clear_buffer()
-		if !serial_port.open():
-			serial_port.close()
-		else:
+		if connect_if_available():
 			# attempt reconnection if serial is lost
 			serial_reconnect = true
 	else:
-		serial_port.close()
+		serial_manager.close(serial_port_name)
 		serial_reconnect = false
 
 func OnChildWantsRefresh(fields:Array[String]) -> void:
-	if !serial_port.is_open():
+	if !serial_manager.is_open(serial_port_name):
 		return
-	serial_port.writeline("@3")
+	serial_manager.write(serial_port_name, "@3\r\n".to_ascii_buffer())
 	for field in fields:
-		serial_port.writeline(field)
+		serial_manager.write(serial_port_name, (field + "\r\n").to_ascii_buffer())
 
 func OnChildSendValue(command : String) -> void:
-	if !serial_port.is_open():
+	if !serial_manager.is_open(serial_port_name):
 		return
 	print("Sending \"%s\"" % command)
-	serial_port.writeline(command)
+	serial_manager.write(serial_port_name, (command+"\r\n").to_ascii_buffer())
 
 
 func _on_refresh_pressed() -> void:
 	refresh_ports("" if serial_port_entry.selected == -1 else serial_port_entry.get_item_text(serial_port_entry.selected), 0)
-
 
 func _on_create_pressed() -> void:
 	var nmotor : motor= motor_scene.instantiate()
@@ -215,3 +225,14 @@ func _on_create_pressed() -> void:
 	nmotor.name = "Motor " + nmotor.commander_letter
 	motor_monitor_keys[nmotor.monitor_start_character] = nmotor
 	add_child(nmotor)
+
+func _on_serial_port_item_selected(index: int) -> void:
+	serial_port_name = get_selected_port_path()
+
+
+func _on_line_edit_text_submitted(new_text: String) -> void:
+	if !serial_manager.is_open(serial_port_name):
+		return
+	add_serial_line(new_text + " <=== ")
+	last_rx_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	serial_manager.write(serial_port_name, (new_text+"\r\n").to_ascii_buffer())
